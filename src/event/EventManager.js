@@ -104,7 +104,7 @@ EventManager.removeEventListener = function(src, type, listener)
 EventManager.removeEventListenerByType = function(src, type)
 {
 	//get event map by source
-	var map = EventManager._maps[event.type];
+	var map = EventManager._maps[type];
 	if(map == undefined) return false;	
 	var srcid = EventManager._sources[src];
 	if(srcid == undefined) return false;	
@@ -118,7 +118,7 @@ EventManager.removeEventListenerByType = function(src, type)
 		empty = false;
 		break;
 	}
-	if(empty) delete EventManager._maps[event.type];
+	if(empty) delete EventManager._maps[type];
 	
 	return true;
 	
