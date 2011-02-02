@@ -150,6 +150,7 @@ Graphics.prototype.drawRect = function(x, y, width, height)
 	this.beginPath();
 	this.rect(x, y, width, height);
 	this.closePath();
+	this.endFill();
 	return this;
 }
 
@@ -171,6 +172,7 @@ Graphics.prototype.drawRoundRectComplex = function(x, y, width, height, cornerTL
 	this.lineTo(x, y + cornerTL);
 	this.arc(x + cornerTL, y + cornerTL, cornerTL, Math.PI, Math.PI*3/2, false);
 	this.closePath();
+	this.endFill();
 	return this;
 }
 
@@ -179,6 +181,7 @@ Graphics.prototype.drawCircle = function(x, y, radius)
 	this.beginPath();
 	this.arc(x + radius, y + radius, radius, 0, Math.PI * 2, 0);
 	this.closePath();
+	this.endFill();
 	return this;
 }
 
@@ -199,6 +202,7 @@ Graphics.prototype.drawEllipse = function(x, y, width, height)
     this.bezierCurveTo(x - w, y + cy, x - cx, y + h, x, y + h);
     this.bezierCurveTo(x + cx, y + h, x + w, y + cy, x + w, y);
     this.closePath();
+	this.endFill();
     return this;
 }
 

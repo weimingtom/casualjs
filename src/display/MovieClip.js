@@ -35,7 +35,7 @@ var MovieClip = function(frames)
 	casual.DisplayObjectContainer.call(this);
 	this.name = NameUtil.createUniqueName("MovieClip");
 	
-	this._frameLabels = {};
+	this._frameLables = {};
 	this._frames = [];
 	if(frames) this.addFrame(frames);
 	this.currentFrame = 1; //starts from 1
@@ -63,7 +63,13 @@ MovieClip.prototype.setFrame = function(frameNumber, data)
 	if(data instanceof casual.Frame) frame = data;
 	else frame = new casual.Frame(data);
 	this._frames[frameNumber - 1] = frame;
-	if(frame.label) this._frameLabels[frame.label] = frameNumber;
+	if(frame.label) this._frameLables[frame.label] = frameNumber;
+}
+
+MovieClip.prototype.getFrameNumber = function(frameNumberOrLabel)
+{
+	if(typeof(frameNumberOrLabel) == "number") return frameNumberOrLabel;
+	return this._frameLables[frameNumberOrLabel];
 }
 
 MovieClip.prototype.getFrame = function(frameNumberOrLabel)
@@ -78,8 +84,8 @@ MovieClip.prototype.removeFrame = function(frameNumberOrLabel)
 	var frameNumber = frameNumberOrLabel;
 	if(frame.label)
 	{
-		frameNumber = this._frameLabels[frame.label];
-		delete this._frameLabels[frame.label];
+		frameNumber = this._frameLables[frame.label];
+		delete this._frameLables[frame.label];
 	}
 	this._frames.splice(frameNumber - 1, 1);
 }
@@ -128,15 +134,15 @@ MovieClip.prototype.stop = function()
 	this._paused = true;
 }
 
-MovieClip.prototype.gotoAndStop = function(frameNumber)
+MovieClip.prototype.gotoAndStop = function(frameNumberOrLabel)
 {
-	this.currentFrame = frameNumber;
+	this.currentFrame = this.getFrameNumber(frameNumberOrLabel);
 	this._paused = true;
 }
 
-MovieClip.prototype.gotoAndPlay = function(frameNumber)
+MovieClip.prototype.gotoAndPlay = function(frameNumberOrLabel)
 {
-	this.currentFrame = frameNumber;
+	this.currentFrame = this.getFrameNumber(frameNumberOrLabel);
 	this._paused = false;
 }
 

@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
 var canvas, context, stage;
-var logo, char1Frames, char2Frames;
+var logo, char1Frames, char2Frames, mychar1, mychar2;
 
 function init()
 {
@@ -28,55 +28,55 @@ function init()
 	char1Frames = 
 	{		
 		down: Frame.create(char1, [
-		[3,2,32,50],
+		["down",3,2,32,50],
 		[43,2,32,50],
 		[83,2,32,50],
-		[123,2,32,50]]),
-
-		left: Frame.create(char1, [
-		[3,56,32,50],
-		[43,56,32,50],
-		[83,56,32,50],
-		[123,56,32,50]]),
-
-		top: Frame.create(char1, [
-		[3,164,32,50],
-		[43,164,32,50],
-		[83,164,32,50],
-		[123,164,32,50]]),
+		[123,2,32,50,0,0,"down"]]),
 
 		right: Frame.create(char1, [
-		[3,110,32,50],
+		["right",3,110,32,50],
 		[43,110,32,50],
 		[83,110,32,50],
-		[123,110,32,50]])		
+		[123,110,32,50,0,0,"right"]]),
+
+		top: Frame.create(char1, [
+		["top",3,164,32,50],
+		[43,164,32,50],
+		[83,164,32,50],
+		[123,164,32,50,0,0,"top"]]),
+
+		left: Frame.create(char1, [
+		["left",3,56,32,50],
+		[43,56,32,50],
+		[83,56,32,50],
+		[123,56,32,50,0,0,"left"]])
 	};
 
 	char2Frames = 
 	{
 		down: Frame.create(char2, [
-		[16,7,32,50],
+		["down",16,7,32,50],
 		[80,7,32,50],
 		[144,7,32,50],
-		[208,7,32,50]]),
-
-		left: Frame.create(char2, [
-		[16,70,32,50],
-		[80,70,32,50],
-		[144,70,32,50],
-		[208,70,32,50]]),
-
-		top: Frame.create(char2, [
-		[16,198,32,50],
-		[80,198,32,50],
-		[144,198,32,50],
-		[208,198,32,50]]),
+		[208,7,32,50,0,0,"down"]]),
 
 		right: Frame.create(char2, [
-		[16,134,32,50],
+		["right",16,134,32,50],
 		[80,134,32,50],
 		[144,134,32,50],
-		[208,134,32,50]])	
+		[208,134,32,50,0,0,"right"]]),
+
+		top: Frame.create(char2, [
+		["top",16,198,32,50],
+		[80,198,32,50],
+		[144,198,32,50],
+		[208,198,32,50,0,0,"top"]]),
+
+		left: Frame.create(char2, [
+		["left",16,70,32,50],
+		[80,70,32,50],
+		[144,70,32,50],
+		[208,70,32,50,0,0,"left"]])			
 	}
 
 	start();
@@ -90,70 +90,74 @@ function start()
 	
 	//char1: down direction
 	var mychar1_down = new MovieClip(char1Frames.down);
-	mychar1_down.x = 130;
+	mychar1_down.x = 100;
 	mychar1_down.y = 100;
 	stage.addChild(mychar1_down);
 	
 	//char1: left direction
 	var mychar1_left = new MovieClip(char1Frames.left);
-	mychar1_left.x = 230;
+	mychar1_left.x = 200;
 	mychar1_left.y = 100;
 	stage.addChild(mychar1_left);
 	
 	//char1: top direction
 	var mychar1_top = new MovieClip(char1Frames.top);
-	mychar1_top.x = 330;
+	mychar1_top.x = 300;
 	mychar1_top.y = 100;
 	stage.addChild(mychar1_top);
 	
 	//char1: right direction
 	var mychar1_right = new MovieClip(char1Frames.right);
-	mychar1_right.x = 430;
+	mychar1_right.x = 400;
 	mychar1_right.y = 100;
 	stage.addChild(mychar1_right);	
 	
 	//char1: composition of 4 direction
-	var mychar1 = new MovieClip();
+	mychar1 = new MovieClip();
 	mychar1.addFrame(char1Frames.down);
-	mychar1.addFrame(char1Frames.left);
+	mychar1.addFrame(char1Frames.right);
 	mychar1.addFrame(char1Frames.top);
-	mychar1.addFrame(char1Frames.right);	
-	mychar1.x = 530;
-	mychar1.y = 100;
+	mychar1.addFrame(char1Frames.left);		
+	mychar1.x = 500;
+	mychar1.y = 50;
+	mychar1.speed = 5;
+	changeDirection(mychar1, "down");
 	stage.addChild(mychar1);
 	
 	//char2: down direction
 	var mychar2_down = new MovieClip(char2Frames.down);
-	mychar2_down.x = 130;
-	mychar2_down.y = 250;
+	mychar2_down.x = 100;
+	mychar2_down.y = 300;
 	stage.addChild(mychar2_down);
 	
 	//char2: left direction
 	var mychar2_left = new MovieClip(char2Frames.left);
-	mychar2_left.x = 230;
-	mychar2_left.y = 250;
+	mychar2_left.x = 200;
+	mychar2_left.y = 300;
 	stage.addChild(mychar2_left);
 	
 	//char2: top direction
 	var mychar2_top = new MovieClip(char2Frames.top);
-	mychar2_top.x = 330;
-	mychar2_top.y = 250;
+	mychar2_top.x = 300;
+	mychar2_top.y = 300;
 	stage.addChild(mychar2_top);
 	
 	//char2: right direction
 	var mychar2_right = new MovieClip(char2Frames.right);
-	mychar2_right.x = 430;
-	mychar2_right.y = 250;
+	mychar2_right.x = 400;
+	mychar2_right.y = 300;
 	stage.addChild(mychar2_right);	
 	
 	//char2: composition of 4 direction
-	var mychar2 = new MovieClip();
+	mychar2 = new MovieClip();
 	mychar2.addFrame(char2Frames.down);
-	mychar2.addFrame(char2Frames.left);
+	mychar2.addFrame(char2Frames.right);
 	mychar2.addFrame(char2Frames.top);
-	mychar2.addFrame(char2Frames.right);	
-	mychar2.x = 530;
-	mychar2.y = 250;
+	mychar2.addFrame(char2Frames.left);		
+	mychar2.x = 500;
+	mychar2.y = 300;
+	mychar2.speed = 5;
+	changeDirection(mychar2, "top");	
 	stage.addChild(mychar2);
 
 	//logo
@@ -163,7 +167,71 @@ function start()
 	mylogo.scaleX = mylogo.scaleY = 0.6;
 	mylogo.alpha = 0.5;
 	stage.addChild(mylogo);
+
+	stage.addEventListener(StageEvent.ENTER_FRAME, enterFrameHandler);
 }
+
+function enterFrameHandler(e)
+{
+	//move mychar1 anti-clockwise, mychar2 clockwise
+	switch(mychar1.direction)
+	{
+		case "down":
+		if(mychar1.y < 150)
+		{
+			mychar1.y += mychar1.speed;
+			mychar2.y -= mychar2.speed;
+		}else
+		{
+			changeDirection(mychar1, "right");
+			changeDirection(mychar2, "right");
+		}
+		break;
+
+		case "right":
+		if(mychar1.x < 600)
+		{
+			mychar1.x += mychar1.speed;
+			mychar2.x += mychar2.speed;
+		}else
+		{
+			changeDirection(mychar1, "top");
+			changeDirection(mychar2, "down");
+		}
+		break;
+
+		case "top":
+		if(mychar1.y > 50)
+		{
+			mychar1.y -= mychar1.speed;
+			mychar2.y += mychar2.speed;
+		}else
+		{
+			changeDirection(mychar1, "left");
+			changeDirection(mychar2, "left");
+		}
+		break;
+
+		case "left":
+		if(mychar1.x > 500)
+		{
+			mychar1.x -= mychar1.speed;
+			mychar2.x -= mychar2.speed;
+		}else
+		{
+			changeDirection(mychar1, "down");
+			changeDirection(mychar2, "top");
+		}
+		break;
+	}
+}
+
+function changeDirection(mychar, dir)
+{
+	mychar.direction = dir;
+	mychar.gotoAndPlay(dir);
+}
+
 </script>
 
 </head>
@@ -196,7 +264,7 @@ Each MovieClip is composited by frames. We can simply say, a Frame represents a 
 
 Typically, you can use Frame.create() to create frames:<br>
 <span class="code">
-<li><b>Frame.create</b> (image, data)</span></li><span class="comment">//data format: [image, label, x, y, width, height, regX, regY, gotoFrame, pauseFrames, stop]</span>
+<li><b>Frame.create</b> (image, data)</span></li><span class="comment">//data format: [label, x, y, width, height, regX, regY, gotoFrame, pauseFrames, stop]</span>
 </span>
 
 <h3>2) Instantiate MovieClips</h3>
@@ -222,8 +290,8 @@ You can also use these methods of MovieClip to control it:<br><br>
 <span class="code">
 <li><b>play</b> ()</li>
 <li><b>stop</b> ()</li>
-<li><b>gotoAndPlay</b> (frameNumber)</li>
-<li><b>gotoAndStop</b> (frameNumber)</li>
+<li><b>gotoAndPlay</b> (frameNumberOrLabel)</li>
+<li><b>gotoAndStop</b> (frameNumberOrLabel)</li>
 <li><b>currentFrame</b></li>
 <li><b>nextFrame</b> ()</li>
 <li><b>getTotalFrames</b> ()</li>
