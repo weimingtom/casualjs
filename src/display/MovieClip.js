@@ -39,6 +39,7 @@ var MovieClip = function(frames)
 	this._frames = [];
 	if(frames) this.addFrame(frames);
 	this.currentFrame = 1; //starts from 1
+	this._frameDisObj = null;
 	this._pauseFrames = 0;
 	this._paused = false;
 }
@@ -63,19 +64,25 @@ MovieClip.prototype.setFrame = function(frameNumber, data)
 	if(data instanceof casual.Frame) frame = data;
 	else frame = new casual.Frame(data);
 	this._frames[frameNumber - 1] = frame;
-	if(frame.label) this._frameLables[frame.label] = frameNumber;
+	if(frame.label) this._frameLables[frame.label] = frame;
 }
 
 MovieClip.prototype.getFrameNumber = function(frameNumberOrLabel)
 {
 	if(typeof(frameNumberOrLabel) == "number") return frameNumberOrLabel;
-	return this._frameLables[frameNumberOrLabel];
+	var frame = frameNumberOrLabel;
+	if(typeof(frame) == "string") frame = this._frameLables[frameNumberOrLabel];	
+	for(var i = 0; i < this._frames.length; i++)
+	{
+		if(frame == this._frames[i]) return i + 1;
+	}
+	return -1;
 }
 
 MovieClip.prototype.getFrame = function(frameNumberOrLabel)
 {
 	if(typeof(frameNumberOrLabel) == "number") return this._frames[frameNumberOrLabel - 1];
-	return this._frames[this._frameLables[frameNumberOrLabel] - 1];
+	return this._frameLables[frameNumberOrLabel];
 }
 
 MovieClip.prototype.removeFrame = function(frameNumberOrLabel)
@@ -84,7 +91,7 @@ MovieClip.prototype.removeFrame = function(frameNumberOrLabel)
 	var frameNumber = frameNumberOrLabel;
 	if(frame.label)
 	{
-		frameNumber = this._frameLables[frame.label];
+		frameNumber = this.getFrameNumber(frame);
 		delete this._frameLables[frame.label];
 	}
 	this._frames.splice(frameNumber - 1, 1);
@@ -96,7 +103,7 @@ MovieClip.prototype.getTotalFrames = function()
 }
 
 /**
- * Move playhead to next frame by current frame data
+ * Move playhead to next frame
  */
 MovieClip.prototype.nextFrame = function()
 {
@@ -114,8 +121,7 @@ MovieClip.prototype.nextFrame = function()
 	{
 		if(this._pauseFrames == 0 || !frame.pauseFrames) 
 		{
-			if(typeof(frame.gotoFrame) == "number") return this.currentFrame = frame.gotoFrame;
-			return this.currentFrame = this._frameLables[frame.gotoFrame];
+			return this.currentFrame = this.getFrameNumber(frame.gotoFrame);
 		}
 	}
 	
@@ -135,7 +141,7 @@ MovieClip.prototype.stop = function()
 }
 
 MovieClip.prototype.gotoAndStop = function(frameNumberOrLabel)
-{
+{	
 	this.currentFrame = this.getFrameNumber(frameNumberOrLabel);
 	this._paused = true;
 }
@@ -146,30 +152,21 @@ MovieClip.prototype.gotoAndPlay = function(frameNumberOrLabel)
 	this._paused = false;
 }
 
-MovieClip.prototype._render = function(context, noTransform, globalTransform)
-{
-	//prepare frame to render
-	if(!this._paused) this.nextFrame();
-	var frame = this.getFrame(this.currentFrame);	
-	if(frame)
-	{
-		//set frame properties for the movieclip
-		this.width = frame.width;
-		this.height = frame.height;
-		this.regX = frame.regX;
-		this.regY = frame.regY;
-		if(frame.stop) this.stop();
-	}	
-	MovieClip.superClass._render.call(this, context, noTransform, globalTransform);
-}
-
 MovieClip.prototype.render = function(context)
 {
-	//render current frame
 	var frame = this.getFrame(this.currentFrame);
-	frame.render(context, 0, 0);
+	//remove display object of last frame
+	if(this._frameDisObj && this._frameDisObj != frame.disObj) this.removeChild(this._frameDisObj);
+	//add display object of current frame	
+	this.addChildAt(frame.disObj, 0);
+	this._frameDisObj = frame.disObj;
+	if(frame.stop) this.stop();
+	
 	//render children
 	MovieClip.superClass.render.call(this, context);
+	
+	//go to next frame
+	if(!this._paused) this.nextFrame();
 }
 
 })();

@@ -62,6 +62,18 @@ DisplayObjectContainer.prototype.removeChild = function(child)
 	return this.removeChildAt(this.children.indexOf(child));
 }
 
+DisplayObjectContainer.prototype.removeChildByName = function(name)
+{	
+	for(var i = 0, len = this.children.length; i < len; i++)
+	{
+		if(this.children[i].name == name) 
+		{
+			return this.removeChildAt(i);
+		}
+	}
+	return null;
+}
+
 DisplayObjectContainer.prototype.removeChildAt = function(index)
 {
 	if (index < 0 || index > this.children.length - 1) return false;
@@ -106,24 +118,37 @@ DisplayObjectContainer.prototype.getNumChildren = function()
 	return this.children.length;
 }
 
-DisplayObjectContainer.prototype.getObjectsUnderPoint = function(x, y, usePixelCollision, tolerance)
+DisplayObjectContainer.prototype.getObjectUnderPoint = function(x, y, usePixelCollision, tolerance, returnAll)
 {
-	var result = [];
-	for(var i = 0, len = this.children.length; i < len; i++)
+	if(returnAll) var result = [];
+	for(var i = this.children.length - 1; i >= 0; i--)
 	{
 		var child = this.children[i];
-		if(child == null || !child.mouseEnabled) continue;
+		if(child == null || !child.mouseEnabled || !child.visible || child.alpha <= 0) continue;
 		
 		if((child instanceof DisplayObjectContainer) && child.mouseChildren && child.getNumChildren() > 0)
 		{			
-			var arr = child.getObjectsUnderPoint(x, y, usePixelCollision, tolerance);
-			if(arr && arr.length > 0) result = result.concat(arr);
+			var obj = child.getObjectUnderPoint(x, y, usePixelCollision, tolerance, returnAll);
+			if(obj)
+			{
+				if(returnAll) {if(obj.length > 0) result = result.concat(obj);}
+				else return obj;
+			}else if(child.hitTestPoint(x, y, usePixelCollision, tolerance))
+			{
+				if(returnAll) result.push(child);
+				else return child;
+			}			
 		}else
 		{
-			if(child.hitTestPoint(x, y, usePixelCollision, tolerance)) result.push(child);
+			if(child.hitTestPoint(x, y, usePixelCollision, tolerance)) 
+			{
+				if(returnAll) result.push(child);
+				else return child;
+			}
 		}
 	}
-	return result;
+	if(returnAll) return result;
+	return null;
 }
 
 DisplayObjectContainer.prototype.render = function(context)

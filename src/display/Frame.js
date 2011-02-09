@@ -30,66 +30,25 @@
  * @name Frame
  * @class
  */
-var Frame = function(data)
+var Frame = function(disObj, label, gotoFrame, pauseFrames, stop)
 {
-	this.setData(data);	
+	this.disObj = disObj; //display object of the frame
+	this.label = label || null; //label for the frame
+	this.gotoFrame = gotoFrame || 0; //can be either frameNumber or frameLabel
+	this.pauseFrames = pauseFrames || 0; //number of frames to pause
+	this.stop = stop || false; //whether stop when play to this frame	
 }
 casual.Frame = Frame;
 
 /**
- * Set data for the frame.
- * @param data [image, label, x, y, width, height, regX, regY, gotoFrame, pauseFrames, stop]
+ * Simple render interface
  */
-Frame.prototype.setData = function(data)
+Frame.prototype.render = function(context, x, y)
 {
-	if(!data) return;
-	var arr = data.slice(0);
-	
-	if(typeof(arr[0]) == "object") this.image = arr.shift();
-	if(typeof(arr[0]) == "string") this.label = arr.shift();
-
-	this.x = arr[0] || 0; //x coordinate within the image
-	this.y = arr[1] || 0; //y cooridmate within the image
-	this.width = arr[2] || 0; //frame image slice width
-	this.height = arr[3] || 0; //frame image slice height
-	this.regX = arr[4] || 0; //x registration point
-	this.regY = arr[5] || 0; //y registration point
-	this.gotoFrame = arr[6] || 0; //can be either frameNumber or frameLabel
-	this.pauseFrames = arr[7] || 0; //number of frames to pause
-	this.stop = arr[8] || 0; //whether stop when play to this frame
+	if(x) this.disObj.x = x;
+	if(y) this.disObj.y = y;
+	this.disObj._render(context, false, false);
 }
 
-/**
- * Simple render interface without any transformation
- */
-Frame.prototype.render = function(context, x, y, width, height)
-{
-	context.drawImage(this.image, this.x, this.y, this.width, this.height, x, y, width || this.width, height || this.height);
-}
-
-/**
- * Frame factory
- */
-Frame.create = function(image, data)
-{
-	//group of frames
-	if(data[0] instanceof Array)
-	{		
-		var frames = [];
-		for(var i = 0, len = data.length; i < len; i++)
-		{
-			var frame = new Frame(data[i]);
-			frame.image = image;
-			frames[i] = frame;
-		}
-		return frames;
-	}
-	
-	//single frame
-	var frame = new Frame(data);
-	frame.image = image;
-	return frame;
-}
- 
 })();
  

@@ -46,6 +46,7 @@ var DisplayObject = function()
 	this.name = null;
 	this.id = null;
 	this.mouseEnabled = true;
+	this.buttonMode = false;
 	this.parent = null;
 	this.stage = null;
 }
@@ -134,6 +135,7 @@ DisplayObject.prototype._transform = function(context, toGlobal)
  */
 DisplayObject.prototype._render = function(context, noTransform, globalTransform)
 {	
+	if(!this.visible || this.alpha <= 0) return;
 	context.save();
 	if(!noTransform) this._transform(context, globalTransform);
 	this.render(context);

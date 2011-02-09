@@ -23,36 +23,47 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
- 
- 
+
+(function(){
 /**
- * Alias for CasualJS Framework
+ * Text
+ * name Text
+ * @class
  */
- 
-//core
-window.trace = casual.trace;
+var Text = function(text, color, font)
+{
+	casual.DisplayObject.call(this);
+	this.name = NameUtil.createUniqueName("Text");
+	
+	this.text = text;
+	this.color = color || "#000";
+	this.font = font || "12px Arial";
+	this.textAlign = "start";
+	this.textBaseline = "alphabetic";
+	this.maxWidth = null;
+	this.outline = false;
+	
+}
+casual.inherit(Text, casual.DisplayObject);
+casual.Text = Text;
 
-//event
-window.EventBase = casual.EventBase;
-window.StageEvent = casual.StageEvent;
-window.EventDispatcher = casual.EventDispatcher;
+Text.prototype.render = function(context)
+{
+	if(!this.text || this.text.length == 0) return;
+	
+	if(this.outline) context.strokeStyle = this.color;
+	else context.fillStyle = this.color;
+	context.font = this.font;
+	context.textAlign = this.textAlign;
+	context.textBaseline = this.textBaseline;
+	if(this.outline) context.strokeText(this.text, 0, 0, this.maxWidth);
+	else context.fillText(this.text, 0, 0, this.maxWidth);
+}
 
-//geom
-window.Matrix = casual.Matrix;
-window.Point = casual.Point;
-
-//utils
-window.Frame = casual.Frame;
-window.Astar = casual.Astar;
-window.NameUtil = casual.NameUtil;
-
-//display
-window.DisplayObject = casual.DisplayObject;
-window.Graphics = casual.Graphics;
-window.Shape = casual.Shape;
-window.Bitmap = casual.Bitmap;
-window.DisplayObjectContainer = casual.DisplayObjectContainer;
-window.Sprite = casual.Sprite;
-window.MovieClip = casual.MovieClip;
-window.Stage = casual.Stage;
-window.Text = casual.Text;
+Text.prototype.getWidth = function(context)
+{
+	if(!this.text || this.text.length == 0) return 0;
+	return context.measureText(this.text).width;
+}
+	
+})();

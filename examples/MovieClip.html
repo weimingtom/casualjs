@@ -23,60 +23,60 @@ function init()
 	//images
 	logo = document.getElementById("logo");
 	var char1 = document.getElementById("char1");
-	var char2 = document.getElementById("char2");
+	var char2 = document.getElementById("char2");	
 	
 	char1Frames = 
 	{		
-		down: Frame.create(char1, [
-		["down",3,2,32,50],
-		[43,2,32,50],
-		[83,2,32,50],
-		[123,2,32,50,0,0,"down"]]),
-
-		right: Frame.create(char1, [
-		["right",3,110,32,50],
-		[43,110,32,50],
-		[83,110,32,50],
-		[123,110,32,50,0,0,"right"]]),
-
-		top: Frame.create(char1, [
-		["top",3,164,32,50],
-		[43,164,32,50],
-		[83,164,32,50],
-		[123,164,32,50,0,0,"top"]]),
-
-		left: Frame.create(char1, [
-		["left",3,56,32,50],
-		[43,56,32,50],
-		[83,56,32,50],
-		[123,56,32,50,0,0,"left"]])
+		down:[
+		new Frame(new Bitmap(char1, [3,2,32,50]), "down"),
+		new Frame(new Bitmap(char1, [43,2,32,50])),
+		new Frame(new Bitmap(char1, [83,2,32,50])),
+		new Frame(new Bitmap(char1, [123,2,32,50]), null, "down")],
+		
+		right:[
+		new Frame(new Bitmap(char1, [3,110,32,50]), "right"),
+		new Frame(new Bitmap(char1, [43,110,32,50])),
+		new Frame(new Bitmap(char1, [83,110,32,50])),
+		new Frame(new Bitmap(char1, [123,110,32,50]), null, "right")],
+		
+		top:[
+		new Frame(new Bitmap(char1, [3,164,32,50]), "top"),
+		new Frame(new Bitmap(char1, [43,164,32,50])),
+		new Frame(new Bitmap(char1, [83,164,32,50])),
+		new Frame(new Bitmap(char1, [123,164,32,50]), null, "top")],
+		
+		left:[
+		new Frame(new Bitmap(char1, [3,56,32,50]), "left"),
+		new Frame(new Bitmap(char1, [43,56,32,50])),
+		new Frame(new Bitmap(char1, [83,56,32,50])),
+		new Frame(new Bitmap(char1, [123,56,32,50]), null, "left")]
 	};
 
 	char2Frames = 
 	{
-		down: Frame.create(char2, [
-		["down",16,7,32,50],
-		[80,7,32,50],
-		[144,7,32,50],
-		[208,7,32,50,0,0,"down"]]),
-
-		right: Frame.create(char2, [
-		["right",16,134,32,50],
-		[80,134,32,50],
-		[144,134,32,50],
-		[208,134,32,50,0,0,"right"]]),
-
-		top: Frame.create(char2, [
-		["top",16,198,32,50],
-		[80,198,32,50],
-		[144,198,32,50],
-		[208,198,32,50,0,0,"top"]]),
-
-		left: Frame.create(char2, [
-		["left",16,70,32,50],
-		[80,70,32,50],
-		[144,70,32,50],
-		[208,70,32,50,0,0,"left"]])			
+		down:[
+		new Frame(new Bitmap(char2, [16,7,32,50]), "down"),
+		new Frame(new Bitmap(char2, [80,7,32,50])),
+		new Frame(new Bitmap(char2, [144,7,32,50])),
+		new Frame(new Bitmap(char2, [208,7,32,50]), null, "down")],
+		
+		right:[
+		new Frame(new Bitmap(char2, [16,134,32,50]), "right"),
+		new Frame(new Bitmap(char2, [80,134,32,50])),
+		new Frame(new Bitmap(char2, [144,134,32,50])),
+		new Frame(new Bitmap(char2, [208,134,32,50]), null, "right")],
+		
+		top:[
+		new Frame(new Bitmap(char2, [16,198,32,50]), "top"),
+		new Frame(new Bitmap(char2, [80,198,32,50])),
+		new Frame(new Bitmap(char2, [144,198,32,50])),
+		new Frame(new Bitmap(char2, [208,198,32,50]), null, "top")],
+		
+		left:[
+		new Frame(new Bitmap(char2, [16,70,32,50]), "left"),
+		new Frame(new Bitmap(char2, [80,70,32,50])),
+		new Frame(new Bitmap(char2, [144,70,32,50])),
+		new Frame(new Bitmap(char2, [208,70,32,50]), null, "left")]	
 	}
 
 	start();
@@ -247,24 +247,23 @@ function changeDirection(mychar, dir)
 On the left canvas, It illustrates how to create animations by using MovieClip and Frame class in CasualJS Framework.
 
 <h3>1) Create frames for a MovieClip</h3>
-Each MovieClip is composited by frames. We can simply say, a Frame represents a certain part of a image, it has properties as below:<br><br>
+Each MovieClip is composited by frames. We can simply say, a Frame represents a certain DisplayObject, it has properties as below:<br><br>
 <span class="code">
-<li><b>image</b> <span class="comment">//the image source<br></span></li>
+<li><b>disObj</b> <span class="comment">//display object of the frame<br></span></li>
 <li><b>label</b> <span class="comment">//a label for the frame<br></span></li>
-<li><b>x</b> <span class="comment">//x coordinate in the image<br></span></li>
-<li><b>y</b> <span class="comment">//y cooridmate in the image<br></span></li>
-<li><b>width</b> <span class="comment">//frame width<br></span></li>
-<li><b>height</b> <span class="comment">//frame height<br></span></li>
-<li><b>regX</b> <span class="comment">//x registration point<br></span></li>
-<li><b>regY</b> <span class="comment">//y registration point<br></span></li>
 <li><b>gotoFrame</b> <span class="comment">//can be either frameNumber or frameLabel<br></span></li>
 <li><b>pauseFrames</b> <span class="comment">//number of frames to pause<br></span></li>
 <li><b>stop</b> <span class="comment">//whether stop when play to this frame<br></span></li>
 </span><br>
 
-Typically, you can use Frame.create() to create frames:<br>
+Constructor:<br>
 <span class="code">
-<li><b>Frame.create</b> (image, data)</span></li><span class="comment">//data format: [label, x, y, width, height, regX, regY, gotoFrame, pauseFrames, stop]</span>
+function(disObj, label, gotoFrame, pauseFrames, stop)
+</span><br><br>
+
+For example:<br>
+<span class="code">
+var frame = new Frame(new Bitmap(image, [16,70,32,50]));
 </span>
 
 <h3>2) Instantiate MovieClips</h3>
