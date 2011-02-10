@@ -41,7 +41,7 @@ var Stage = function(context)
 	this._frameRate = 1;
 	this._mouseX = 0;
 	this._mouseY = 0;
-	this._mouseTarget = null;
+	//this._mouseTarget = null;
 	this._dragTarget = null;
 	this._paused = false;
 	this._pauseInNextFrame = false;
@@ -87,18 +87,19 @@ Stage.prototype.__mouseHandler = function(event)
 	this._mouseX = event.pageX - this._context.canvas.offsetLeft;
 	this._mouseY = event.pageY - this._context.canvas.offsetTop;
 	
-	if(event.type == "mousemove") this.__getMouseTarget();	
+	//disable it, too much cpu consuming...
+	//if(event.type == "mousemove") this.__getMouseTarget();	
 
 	//stage event
 	var e = casual.EventBase.clone(event, casual.StageEvent);
-	e.target = e.currentTarget = this._mouseTarget || this;
+	e.target = e.currentTarget = this;
 	e.stageX = this._mouseX;
 	e.stageY = this._mouseY;
 
 	//if onMouseEvent is defined, trigger it...
-	if(this._mouseTarget && this._mouseTarget.onMouseEvent) this._mouseTarget.onMouseEvent(e);
+	//if(this._mouseTarget && this._mouseTarget.onMouseEvent) this._mouseTarget.onMouseEvent(e);
 	//change cursor by buttonMode
-	this._context.canvas.style.cursor = (this._mouseTarget && this._mouseTarget.buttonMode) ? "pointer" : "";	
+	//this._context.canvas.style.cursor = (this._mouseTarget && this._mouseTarget.buttonMode) ? "pointer" : "";	
 	
 	//dispatch event
 	this.dispatchEvent(e);
@@ -108,11 +109,13 @@ Stage.prototype.__mouseHandler = function(event)
   	event.stopPropagation();
 }
 
+/*/
 Stage.prototype.__getMouseTarget = function()
 {
 	//tip: override it for optimization or customization
 	this._mouseTarget = this.getObjectUnderPoint(this._mouseX, this._mouseY, true);
 }
+//*/
 
 Stage.prototype.__enterFrame = function()
 {
