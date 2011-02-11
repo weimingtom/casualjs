@@ -32,6 +32,8 @@
  */
 var DisplayObject = function()
 {
+	this.id = null;
+	this.name = null;	
 	this.x = 0;
 	this.y = 0;
 	this.width = 0;
@@ -42,16 +44,19 @@ var DisplayObject = function()
 	this.rotation = 0;
 	this.regX = 0;
 	this.regY = 0;
-	this.visible = true;
-	this.name = null;
-	this.id = null;
+	this.visible = true;	
 	this.mouseEnabled = true;
 	this.buttonMode = false;
 	this.parent = null;
-	this.stage = null;
+	this.stage = null;	
 }
 casual.inherit(DisplayObject, casual.EventDispatcher);
 casual.DisplayObject = DisplayObject;
+
+//intenal canvas for hit testing usage
+var canvas = document.createElement("canvas");
+canvas.width = canvas.height = 1;
+DisplayObject.__hitTestContext = canvas.getContext("2d");
 
 DisplayObject.prototype.getCurrentWidth = function()
 {
@@ -99,7 +104,7 @@ DisplayObject.prototype.localToTarget = function(x, y, target)
 
 DisplayObject.prototype.getConcatenatedMatrix = function() 
 {
-	//TODO: cache the concatenated matrix to increase performance
+	//TODO: cache the concatenated matrix to get better performance
 	var mtx = new casual.Matrix();
 	for (var o = this; o != null; o = o.parent)
 	{
@@ -127,7 +132,7 @@ DisplayObject.prototype._transform = function(context, toGlobal)
 }
 
 /**
- * Render wrapper, prepare and restore context.
+ * Entry of rendering, prepare and restore context.
  * @param context The context render to
  * @param noTransform Whether do transformation or not, default is do transformation.
  * @param globalTransform Whether do global transformation or not
@@ -148,38 +153,43 @@ DisplayObject.prototype._render = function(context, noTransform, globalTransform
 DisplayObject.prototype.render = function(context) { };
 
 DisplayObject.prototype.hitTestPoint = function(x, y, usePixelCollision, tolerance)
-{
+{	
 	if(!usePixelCollision)
 	{
 		var p = this.globalToLocal(x, y);
 		return p.x >= 0 && p.x <= this.getCurrentWidth() && p.y >= 0 && p.y <= this.getCurrentHeight();
 	}
 	
-	var stage = this.getStage();
-	if(stage == null) return false;
-	var tempContext = stage.__getTempContext();
-	
+	var context = DisplayObject.__hitTestContext;
+	context.setTransform(1, 0, 0, 1, -x, -y);
+	//render this displayobject to the hit testing context
+	this._render(context, false, true);
+
 	//default tolerance is 50
-	if(tolerance == undefined) tolerance = 50;
-	//render this displayobject to the temp context
-	this._render(tempContext, false, true);
+	if(tolerance == undefined) tolerance = 50;	
 	var result = false;
 	try
 	{		
 		//get image data (format:RGBA) by 1*1 rectangle, then check if it's transparent
-		var data = tempContext.getImageData(x, y, 1, 1).data;
-		//trace("hitTestPoint", this, data[0], data[1], data[2], data[3], tolerance);
+		var data = context.getImageData(0, 0, 1, 1).data;
+		//trace("hitTestPoint:", this, data[0], data[1], data[2], data[3], tolerance);
 		if(data[3] > tolerance) result = true;
 	}catch(e)
 	{
-		//nothing, throw error?
-		trace("hitTestPoint", this, e);
+		//do nothing, throw error?
+		trace("hitTestPoint:", this, e);
 	};
 	
 	//clear canvas and return result
-	tempContext.canvas.width = 0;
+	context.canvas.width = 0;
+	context.canvas.width = 1;
+	//context.setTransform(1, 0, 0, 1, 0, 0);
+	//context.clearRect(0, 0, 1, 1);
 	return result;
 }
+
+//this only works when Stage._traceMouseTarget=true
+DisplayObject.prototype.onMouseEvent = null;
 
 DisplayObject.prototype.toString = function()
 {

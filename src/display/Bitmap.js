@@ -26,11 +26,12 @@
 
 (function(){
 /**
- * Represent a bitmap, different from Bitmap in AS3, it can accept interaction.
+ * Constructor
  * @param image Image data, can be HTMLImageElement, HTMLCanvasElement, or HTMLVideoElement
  * @param imageSlice format: [x, y, width, height, regX, regY]
  * @name Bitmap
- * @class
+ * @class Represent a bitmap, different from Bitmap in AS3, it can accept interaction.
+ * @augments DisplayObject
  */ 
 var Bitmap = function(image, imageSlice)
 {	

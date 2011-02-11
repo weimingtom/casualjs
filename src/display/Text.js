@@ -26,8 +26,8 @@
 
 (function(){
 /**
- * Text
- * name Text
+ * Text implementation
+ * @name Text
  * @class
  */
 var Text = function(text, color, font)

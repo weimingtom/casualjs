@@ -38,9 +38,4 @@ var Sprite = function()
 casual.inherit(Sprite, casual.DisplayObjectContainer);
 casual.Sprite = Sprite;
 
-Sprite.prototype.render = function(context)
-{		
-	Sprite.superClass.render.call(this, context);
-}
-
 })();

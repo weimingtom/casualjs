@@ -224,6 +224,7 @@ Graphics.prototype.clear = function()
 {
 	this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
 	this._context.restore();
+	return this;
 }
 
 })();

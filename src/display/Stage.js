@@ -35,28 +35,31 @@ var Stage = function(context)
 	if(context == null) throw Error("Context can't be null!");
 	casual.DisplayObjectContainer.call(this);
 	this.name = NameUtil.createUniqueName("Stage");
+	
+	this.context = context;
+	this.canvas = context.canvas;
+	this.mouseX = 0;
+	this.mouseY = 0;
 
 	//@protected
-	this._context = context;
-	this._frameRate = 1;
-	this._mouseX = 0;
-	this._mouseY = 0;
-	//this._mouseTarget = null;
-	this._dragTarget = null;
+	this._frameRate = 1;	
 	this._paused = false;
 	this._pauseInNextFrame = false;
+	//determine whether trace mouse target
+	this._traceMouseTarget = true;
+	this._mouseTarget = null;
+	this._dragTarget = null;
 	
 	//@private internal use
-	this.__tempContext = null;
 	this.__intervalID = null;
 	
 	//default frameRate is 20
 	this.setFrameRate(20);
 	
 	//delegate mouse events on the canvas
-	this._context.canvas.onmousedown = casual.delegate(this.__mouseHandler, this);
-	this._context.canvas.onmouseup = casual.delegate(this.__mouseHandler, this);
-	this._context.canvas.onmousemove = casual.delegate(this.__mouseHandler, this);
+	this.canvas.onmousedown = casual.delegate(this.__mouseHandler, this);
+	this.canvas.onmouseup = casual.delegate(this.__mouseHandler, this);
+	this.canvas.onmousemove = casual.delegate(this.__mouseHandler, this);
 }
 casual.inherit(Stage, casual.DisplayObjectContainer);
 casual.Stage = Stage;
@@ -84,22 +87,22 @@ Stage.prototype.setFrameRate = function(frameRate)
 
 Stage.prototype.__mouseHandler = function(event)
 {
-	this._mouseX = event.pageX - this._context.canvas.offsetLeft;
-	this._mouseY = event.pageY - this._context.canvas.offsetTop;
+	this.mouseX = event.pageX - this.canvas.offsetLeft;
+	this.mouseY = event.pageY - this.canvas.offsetTop;
 	
-	//disable it, too much cpu consuming...
-	//if(event.type == "mousemove") this.__getMouseTarget();	
+	//trace mouse target if _traceMouseTarget=true
+	if(this._traceMouseTarget && event.type == "mousemove") this.__getMouseTarget();	
 
 	//stage event
 	var e = casual.EventBase.clone(event, casual.StageEvent);
 	e.target = e.currentTarget = this;
-	e.stageX = this._mouseX;
-	e.stageY = this._mouseY;
+	e.stageX = this.mouseX;
+	e.stageY = this.mouseY;
 
-	//if onMouseEvent is defined, trigger it...
-	//if(this._mouseTarget && this._mouseTarget.onMouseEvent) this._mouseTarget.onMouseEvent(e);
+	//if onMouseEvent is defined for mouseTarget, trigger it...
+	if(this._mouseTarget && this._mouseTarget.onMouseEvent) this._mouseTarget.onMouseEvent(e);
 	//change cursor by buttonMode
-	//this._context.canvas.style.cursor = (this._mouseTarget && this._mouseTarget.buttonMode) ? "pointer" : "";	
+	this.setCursor((this._mouseTarget && this._mouseTarget.buttonMode) ? "pointer" : "");
 	
 	//dispatch event
 	this.dispatchEvent(e);
@@ -109,21 +112,23 @@ Stage.prototype.__mouseHandler = function(event)
   	event.stopPropagation();
 }
 
-/*/
 Stage.prototype.__getMouseTarget = function()
 {
-	//tip: override it for optimization or customization
-	this._mouseTarget = this.getObjectUnderPoint(this._mouseX, this._mouseY, true);
+	this._mouseTarget = this.getObjectUnderPoint(this.mouseX, this.mouseY, true);
 }
-//*/
 
 Stage.prototype.__enterFrame = function()
 {
 	if(this._paused && !this._pauseInNextFrame) return;
 	this.dispatchEvent(new StageEvent(StageEvent.ENTER_FRAME));
 	//check if paused once more, because it may be changed in ENTER_FRAME handler
-	if(!this._paused || this._pauseInNextFrame) this._render(this._context, true);
-	if(this._frameRate == 0) clearInterval(this.__intervalID);
+	if(!this._paused || this._pauseInNextFrame) this._render(this.context, true);
+	if(this._frameRate <= 0) 
+	{
+		//stop rendering if frameRate equal 0
+		clearInterval(this.__intervalID);
+		this.__intervalID = null;
+	}
 }
 
 /**
@@ -131,11 +136,12 @@ Stage.prototype.__enterFrame = function()
  */
 Stage.prototype.render = function(context)
 {	
+	if(!context) context = this.context;
 	this.clear();
 	if(this._dragTarget)
 	{
 		//handle drag target
-		var p = this._dragTarget.globalToLocal(this._mouseX, this._mouseY);
+		var p = this._dragTarget.globalToLocal(this.mouseX, this.mouseY);
 		this._dragTarget.x = p.x;
 		this._dragTarget.y = p.y;
 	}
@@ -148,34 +154,22 @@ Stage.prototype.render = function(context)
 	}
 }
 
-Stage.prototype.__getTempContext = function()
-{
-	var tempCanvas;
-	if(this.__tempContext == null) 
-	{
-		tempCanvas = document.createElement("canvas");
-		this.__tempContext = tempCanvas.getContext("2d");
-	}else
-	{
-		tempCanvas = this.__tempContext.canvas;		
-	}
-	//keep temp canvas's size same as its context
-	tempCanvas.width = this._context.canvas.width;
-	tempCanvas.height = this._context.canvas.height;
-	return this.__tempContext;
-}
-
 Stage.prototype.startDrag = function(target, bounds)
 {
 	this._dragTarget = target;
-	//this._context.canvas.style.cursor = "pointer";
+	//this.setCursor("pointer");
 	//this._bounds = bounds; //TODO: restrict dragging bound
 }
 
 Stage.prototype.stopDrag = function()
 {
 	this._dragTarget = null;
-	//this._context.canvas.style.cursor = "";
+	//this.setCursor("");
+}
+
+Stage.prototype.setCursor = function(cursor)
+{
+	this.canvas.style.cursor = cursor;
 }
 
 /**
@@ -183,43 +177,23 @@ Stage.prototype.stopDrag = function()
  */
 Stage.prototype.clear = function(x, y, width, height)
 {
-	if(arguments.length >= 4) this._context.clearRect(x, y, width, height);
-	else this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
-}
-
-Stage.prototype.getMouseX = function()
-{
-	return this._mouseX;
-}
-
-Stage.prototype.getMouseY = function()
-{
-	return this._mouseY;
+	if(arguments.length >= 4) this.context.clearRect(x, y, width, height);
+	else this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 }
 
 Stage.prototype.getStageWidth = function()
 {
-	return this._context.canvas.width;
+	return this.canvas.width;
 }
 
 Stage.prototype.getStageHeight = function()
 {
-	return this._context.canvas.height;
+	return this.canvas.height;
 }
 
 Stage.prototype.getFrameRate = function()
 {
 	return this._frameRate;
-}
-
-Stage.prototype.getContext = function()
-{
-	return this._context;
-}
-
-Stage.prototype.getCanvas = function()
-{
-	return this._context.canvas;
 }
 
 })();

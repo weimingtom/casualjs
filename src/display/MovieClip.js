@@ -159,14 +159,14 @@ MovieClip.prototype.render = function(context)
 	if(this._frameDisObj && this._frameDisObj != frame.disObj) this.removeChild(this._frameDisObj);
 	//add display object of current frame	
 	this.addChildAt(frame.disObj, 0);
-	this._frameDisObj = frame.disObj;
+	this._frameDisObj = frame.disObj;	
 	if(frame.stop) this.stop();
-	
+
 	//render children
 	MovieClip.superClass.render.call(this, context);
-	
+
 	//go to next frame
-	if(!this._paused) this.nextFrame();
+	if(!this._paused && context == this.getStage().context) this.nextFrame();
 }
 
 })();

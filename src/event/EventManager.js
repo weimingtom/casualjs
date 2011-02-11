@@ -91,7 +91,7 @@ EventManager.removeEventListener = function(src, type, listener)
 		}
 	}
 	
-	//TODO: bug
+	//TODO: bug?
 	if(empty)
 	{
 		delete EventManager._maps[type][srcid];
@@ -125,8 +125,15 @@ EventManager.removeEventListenerByType = function(src, type)
 };
 
 EventManager.removeAllEventListeners = function(src)
-{
-	//TODO
+{	
+	var srcid = EventManager._sources[src];
+	if(srcid == undefined) return false;
+	for(var type in EventManager._maps)
+	{
+		var map = EventManager._maps[type];
+		if(map[scrid] != undefined) delete map[scrid];
+	}
+	delete EventManager._sources[src];
 };
 
 EventManager.dispatchEvent = function(src, event)
@@ -156,8 +163,11 @@ EventManager.dispatchEvent = function(src, event)
 
 EventManager.hasEventListener = function(src, type)
 {
-	 //TODO
-	 return false;	
+	var map = EventManager._maps[type];
+	if(map == undefined) return false;	
+	var srcid = EventManager._sources[src];
+	if(srcid == undefined) return false;
+	return map[srcid] != undefined;
 };
 
 })();
