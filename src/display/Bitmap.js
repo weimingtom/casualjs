@@ -28,12 +28,12 @@
 /**
  * Constructor
  * @param image Image data, can be HTMLImageElement, HTMLCanvasElement, or HTMLVideoElement
- * @param imageSlice format: [x, y, width, height, regX, regY]
+ * @param frame format: [x, y, width, height, regX, regY]
  * @name Bitmap
  * @class Represent a bitmap, different from Bitmap in AS3, it can accept interaction.
  * @augments DisplayObject
  */ 
-var Bitmap = function(image, imageSlice)
+var Bitmap = function(image, frame)
 {	
 	casual.DisplayObject.call(this);
 	this.name = NameUtil.createUniqueName("Bitmap");
@@ -43,19 +43,19 @@ var Bitmap = function(image, imageSlice)
 	
 	//save image and image slice data
 	this.image = image;	
-	if(!imageSlice) this.imageSlice = [0, 0, image.width, image.height];
-	else this.imageSlice = imageSlice;
-	this.width = this.imageSlice[2];
-	this.height = this.imageSlice[3];
-	this.regX = this.imageSlice[4] || 0;
-	this.regY = this.imageSlice[5] || 0;
+	if(!frame) this.frame = [0, 0, image.width, image.height];
+	else this.frame = frame;
+	this.width = this.frame[2];
+	this.height = this.frame[3];
+	this.regX = this.frame[4] || 0;
+	this.regY = this.frame[5] || 0;
 }
 casual.inherit(Bitmap, casual.DisplayObject);
 casual.Bitmap = Bitmap;
 
 Bitmap.prototype.render = function(context)
 {
-	context.drawImage(this.image, this.imageSlice[0], this.imageSlice[1], this.imageSlice[2], this.imageSlice[3], 0, 0, this.width, this.height);
+	context.drawImage(this.image, this.frame[0], this.frame[1], this.frame[2], this.frame[3], 0, 0, this.width, this.height);
 }
 
 })();

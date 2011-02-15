@@ -41,14 +41,17 @@ var Stage = function(context)
 	this.mouseX = 0;
 	this.mouseY = 0;
 
-	//@protected
-	this._frameRate = 1;	
-	this._paused = false;
-	this._pauseInNextFrame = false;
 	//determine whether trace mouse target
-	this._traceMouseTarget = true;
-	this._mouseTarget = null;
-	this._dragTarget = null;
+	this.traceMouseTarget = true;
+	//refer to current mouse target if traceMouseTarget=true
+	this.mouseTarget = null;
+	//refer to current dragging object
+	this.dragTarget = null;
+
+	//@protected
+	this._frameRate = 0;
+	this._paused = false;
+	this._pauseInNextFrame = false;	
 	
 	//@private internal use
 	this.__intervalID = null;
@@ -90,8 +93,8 @@ Stage.prototype.__mouseHandler = function(event)
 	this.mouseX = event.pageX - this.canvas.offsetLeft;
 	this.mouseY = event.pageY - this.canvas.offsetTop;
 	
-	//trace mouse target if _traceMouseTarget=true
-	if(this._traceMouseTarget && event.type == "mousemove") this.__getMouseTarget();	
+	//trace mouse target if traceMouseTarget=true
+	if(this.traceMouseTarget && event.type == "mousemove") this.__getMouseTarget();	
 
 	//stage event
 	var e = casual.EventBase.clone(event, casual.StageEvent);
@@ -100,9 +103,9 @@ Stage.prototype.__mouseHandler = function(event)
 	e.stageY = this.mouseY;
 
 	//if onMouseEvent is defined for mouseTarget, trigger it...
-	if(this._mouseTarget && this._mouseTarget.onMouseEvent) this._mouseTarget.onMouseEvent(e);
-	//change cursor by buttonMode
-	this.setCursor((this._mouseTarget && this._mouseTarget.buttonMode) ? "pointer" : "");
+	if(this.mouseTarget && this.mouseTarget.onMouseEvent) this.mouseTarget.onMouseEvent(e);
+	//change cursor by useHandCursor property
+	this.setCursor((this.mouseTarget && this.mouseTarget.useHandCursor) ? "pointer" : "");
 	
 	//dispatch event
 	this.dispatchEvent(e);
@@ -114,7 +117,9 @@ Stage.prototype.__mouseHandler = function(event)
 
 Stage.prototype.__getMouseTarget = function()
 {
-	this._mouseTarget = this.getObjectUnderPoint(this.mouseX, this.mouseY, true);
+	 var obj = this.getObjectUnderPoint(this.mouseX, this.mouseY, true);
+	 if(this.mouseTarget && this.mouseTarget.onMouseEvent && this.mouseTarget != obj) this.mouseTarget.onMouseEvent({type:"mouseout"});
+	this.mouseTarget = obj;
 }
 
 Stage.prototype.__enterFrame = function()
@@ -138,12 +143,12 @@ Stage.prototype.render = function(context)
 {	
 	if(!context) context = this.context;
 	this.clear();
-	if(this._dragTarget)
+	if(this.dragTarget)
 	{
 		//handle drag target
-		var p = this._dragTarget.globalToLocal(this.mouseX, this.mouseY);
-		this._dragTarget.x = p.x;
-		this._dragTarget.y = p.y;
+		var p = this.dragTarget.globalToLocal(this.mouseX, this.mouseY);
+		this.dragTarget.x = p.x;
+		this.dragTarget.y = p.y;
 	}
 	Stage.superClass.render.call(this, context);
 	
@@ -156,14 +161,14 @@ Stage.prototype.render = function(context)
 
 Stage.prototype.startDrag = function(target, bounds)
 {
-	this._dragTarget = target;
+	this.dragTarget = target;
 	//this.setCursor("pointer");
-	//this._bounds = bounds; //TODO: restrict dragging bound
+	//this._bounds = bounds; //TODO: restrict dragging area
 }
 
 Stage.prototype.stopDrag = function()
 {
-	this._dragTarget = null;
+	this.dragTarget = null;
 	//this.setCursor("");
 }
 

@@ -46,7 +46,7 @@ var DisplayObject = function()
 	this.regY = 0;
 	this.visible = true;	
 	this.mouseEnabled = true;
-	this.buttonMode = false;
+	this.useHandCursor = false;
 	this.parent = null;
 	this.stage = null;	
 }
@@ -57,6 +57,7 @@ casual.DisplayObject = DisplayObject;
 var canvas = document.createElement("canvas");
 canvas.width = canvas.height = 1;
 DisplayObject.__hitTestContext = canvas.getContext("2d");
+DisplayObject.__hitTestTolerance = 50;
 
 DisplayObject.prototype.getCurrentWidth = function()
 {
@@ -166,7 +167,7 @@ DisplayObject.prototype.hitTestPoint = function(x, y, usePixelCollision, toleran
 	this._render(context, false, true);
 
 	//default tolerance is 50
-	if(tolerance == undefined) tolerance = 50;	
+	tolerance = tolerance || DisplayObject.__hitTestTolerance;	
 	var result = false;
 	try
 	{		
@@ -188,7 +189,7 @@ DisplayObject.prototype.hitTestPoint = function(x, y, usePixelCollision, toleran
 	return result;
 }
 
-//this only works when Stage._traceMouseTarget=true
+//this only works when Stage.traceMouseTarget=true
 DisplayObject.prototype.onMouseEvent = null;
 
 DisplayObject.prototype.toString = function()

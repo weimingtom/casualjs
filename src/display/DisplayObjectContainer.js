@@ -108,6 +108,15 @@ DisplayObjectContainer.prototype.getChildIndex = function(child)
 	return this.children.indexOf(child);
 }
 
+DisplayObjectContainer.prototype.setChildIndex = function(child, index)
+{
+	if(child.parent != this) return;
+	var oldIndex = this.children.indexOf(child);
+	if(index == oldIndex) return;
+	this.children.splice(oldIndex, 1);
+	this.children.splice(index, 0, child);
+}
+
 DisplayObjectContainer.prototype.contains = function(child)
 {
 	return this.getChildIndex(child) != -1;
