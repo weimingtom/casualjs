@@ -71,11 +71,4 @@ EventBase.prototype.toString = function()
 	return "[EventBase type=" + this.type + "]";
 }
 
-EventBase.clone = function(eventObj, eventClass)
-{
-	var e = eventClass ? new eventClass() : new EventBase();
-	for(var key in eventObj) e[key] = eventObj[key];
-	return e;
-}
-
 })();

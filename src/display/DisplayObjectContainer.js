@@ -41,8 +41,13 @@ casual.DisplayObjectContainer = DisplayObjectContainer;
 
 DisplayObjectContainer.prototype.addChild = function(child)
 {
-	if(child.parent == this) return child;
-	else if(child.parent) child.parent.removeChild(child);
+	if(this.getChildIndex(child) != -1)
+	{
+		child.parent = this;
+		return child;
+	}
+
+	if(child.parent) child.parent.removeChild(child);
 	this.children[this.children.length] = child;
 	child.parent = this;
 	return child;
@@ -50,8 +55,13 @@ DisplayObjectContainer.prototype.addChild = function(child)
 
 DisplayObjectContainer.prototype.addChildAt = function(child, index)
 {
-	if(child.parent == this) return child;
-	else if (child.parent) child.parent.removeChild(child);
+	if(this.getChildIndex(child) != -1)
+	{
+		child.parent = this;
+		return child;
+	}
+
+	if(child.parent) child.parent.removeChild(child);
 	this.children.splice(index, 0, child);
 	child.parent = this;	
 	return child;

@@ -32,6 +32,8 @@
  * @name Bitmap
  * @class Represent a bitmap, different from Bitmap in AS3, it can accept interaction.
  * @augments DisplayObject
+ * @property image The image source for bitmap.
+ * @property frame A special frame of image to render. The format is [x, y, width, height, regX, regY].
  */ 
 var Bitmap = function(image, frame)
 {	
@@ -41,7 +43,7 @@ var Bitmap = function(image, frame)
 	//default is mouse disabled, but differ from Bitmap in AS3, this Bitmap can accept interaction
 	this.mouseEnabled = false;
 	
-	//save image and image slice data
+	//save image and image frame data
 	this.image = image;	
 	if(!frame) this.frame = [0, 0, image.width, image.height];
 	else this.frame = frame;

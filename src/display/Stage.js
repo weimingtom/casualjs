@@ -29,6 +29,14 @@
  * The root of display object list.
  * @name Stage
  * @class
+ * @augments DisplayObjectContainer
+ * @property context Refer to the working context.
+ * @property canvas Refer to the working canvas.
+ * @property mouseX The x coordinate of mouse position on stage.
+ * @property mouseY The y coordinate of mouse position on stage.
+ * @property traceMouseTarget Determine whether trace mouse target.
+ * @property mouseTarget Refer to current mouse target if set traceMouseTarget to true.
+ * @property dragTarget Refer to current dragging object. 
  */
 var Stage = function(context)
 {
@@ -43,7 +51,7 @@ var Stage = function(context)
 
 	//determine whether trace mouse target
 	this.traceMouseTarget = true;
-	//refer to current mouse target if traceMouseTarget=true
+	//refer to current mouse target if set traceMouseTarget to true
 	this.mouseTarget = null;
 	//refer to current dragging object
 	this.dragTarget = null;
@@ -94,11 +102,16 @@ Stage.prototype.__mouseHandler = function(event)
 	this.mouseY = event.pageY - this.canvas.offsetTop;
 	
 	//trace mouse target if traceMouseTarget=true
-	if(this.traceMouseTarget && event.type == "mousemove") this.__getMouseTarget();	
+	if(this.traceMouseTarget && event.type == "mousemove")
+	{
+		//know issue: it can get mouse target only start with mousemove
+		//it won't work properly if the mouse doesn't move but click at inital time
+		this.__getMouseTarget(event);
+	}	
 
 	//stage event
-	var e = casual.EventBase.clone(event, casual.StageEvent);
-	e.target = e.currentTarget = this;
+	var e = casual.copy(event, casual.StageEvent);
+	e.target = e.currentTarget = this.mouseTarget || this;
 	e.stageX = this.mouseX;
 	e.stageY = this.mouseY;
 
@@ -115,11 +128,20 @@ Stage.prototype.__mouseHandler = function(event)
   	event.stopPropagation();
 }
 
-Stage.prototype.__getMouseTarget = function()
+Stage.prototype.__getMouseTarget = function(event)
 {
-	 var obj = this.getObjectUnderPoint(this.mouseX, this.mouseY, true);
-	 if(this.mouseTarget && this.mouseTarget.onMouseEvent && this.mouseTarget != obj) this.mouseTarget.onMouseEvent({type:"mouseout"});
+	var obj = this.getObjectUnderPoint(this.mouseX, this.mouseY, true);
+	var oldObj = this.mouseTarget;
 	this.mouseTarget = obj;
+	if(oldObj && oldObj.onMouseEvent && oldObj != obj)
+	{
+		var e = casual.copy(event, casual.StageEvent);
+		e.type = "mouseout";
+		e.target = e.currentTarget = oldObj;
+		e.stageX = this.mouseX;
+		e.stageY = this.mouseY;
+		oldObj.onMouseEvent(e);	
+	}	
 }
 
 Stage.prototype.__enterFrame = function()

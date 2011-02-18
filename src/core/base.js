@@ -74,3 +74,36 @@ casual.delegate = function(func, self, args)
     	return function() { return func.apply(context, arguments); };
   	}
 };
+
+casual.copy = function(obj, targetClass)
+{
+	//base type
+	if (typeof obj !== 'object') return obj;
+	
+	var value = obj.valueOf();
+	//simple object which wraping native types
+	if (obj != value) return new obj.constructor(value);
+	
+	var o;
+	if (obj instanceof obj.constructor && obj.constructor !== Object)
+	{ 
+		if(targetClass) o = new targetClass();
+		else o = casual.clone(obj.constructor.prototype);
+		for(var key in obj)
+		{ 
+			if (targetClass || obj.hasOwnProperty(key)) o[key] = obj[key];
+		}
+	}else
+	{
+		o = {};
+		for(var key in obj) o[key] = obj[key];
+	}	
+	return o;
+};
+
+casual.__cloneFunc = function() {};
+casual.clone = function(obj)
+{
+	casual.__cloneFunc.prototype = obj;
+	return new casual.__cloneFunc();
+};
