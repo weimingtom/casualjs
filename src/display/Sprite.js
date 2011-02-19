@@ -26,9 +26,10 @@
 
 (function(){
 /**
- * Sprite
+ * Constructor.
  * @name Sprite
- * @class
+ * @class The Sprite class is a basic display list building block which can contain children. 
+ * @augments DisplayObjectContainer
  */ 
 var Sprite = function()
 {

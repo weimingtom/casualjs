@@ -26,9 +26,11 @@
 
 (function(){
 /**
- * Point
+ * Constructor.
  * @name Point
- * @class
+ * @class The Point object represents a location in a two-dimensional coordinate system, where x represents the horizontal axis and y represents the vertical axis.
+ * @property x The horizontal coordinate of the point.
+ * @property y The vertical coordinate of the point.
  */ 
 var Point = function(x, y)
 {
@@ -37,6 +39,22 @@ var Point = function(x, y)
 }
 casual.Point = Point;
 
-//TODO: manipulation functions
+//TODO: manipulation functions.
+
+/**
+ * Creates a copy of this Point object.
+ */
+Point.prototype.clone = function()
+{
+	return new Point(this.x, this.y);	
+}
+
+/**
+ * Returns a string that contains the values of the x and y coordinates.
+ */
+Point.prototype.toString = function()
+{
+	return "(x=" + this.x + ", y=" + this.y + ")";	
+}
 
 })();

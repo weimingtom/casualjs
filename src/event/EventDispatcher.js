@@ -26,38 +26,56 @@
 
 (function(){
 /**
- * Base class which can dispatch and listen events
+ * Constructor.
  * @name EventDispatcher
- * @class
+ * @class The EventDispatcher class is the base class for all classes that dispatch events. It is the base class for the DisplayObject class.
  */
 var EventDispatcher = function(){ };
 casual.EventDispatcher = EventDispatcher;
 
+/**
+ * Registers an event listener with an EventDispatcher object so that the listener receives notification of an event.
+ */
 EventDispatcher.prototype.addEventListener = function(type, listener)
 {
 	casual.EventManager.addEventListener(this, type, listener);
 }
 
+/**
+ * Removes a listener from the EventDispatcher object.
+ */
 EventDispatcher.prototype.removeEventListener = function(type, listener)
 {
 	casual.EventManager.removeEventListener(this, type, listener);
 }
 
+/**
+ * Removes a listener with specific event type from the EventDispatcher object.
+ */
 EventDispatcher.prototype.removeEventListenerByType = function(type)
 {
 	casual.EventManager.removeEventListenerByType(this, type);
 }
 
+/**
+ * Removes all listeners from the EventDispatcher object.
+ */
 EventDispatcher.prototype.removeAllEventListeners = function()
 {
 	casual.EventManager.removeAllEventListeners(this);
 }
 
+/**
+ * Dispatches an event to its registered listeners.
+ */
 EventDispatcher.prototype.dispatchEvent = function(event)
 {
 	casual.EventManager.dispatchEvent(this, event);
 }
 
+/**
+ * Checks whether the EventDispatcher object has any listeners registered for a specific type of event.
+ */
 EventDispatcher.prototype.hasEventListener = function(type)
 {
 	return casual.EventManager.hasEventListener(this, type);

@@ -25,15 +25,15 @@
  */
 
 (function(){
-/**
- * Constructor
- * @param image Image data, can be HTMLImageElement, HTMLCanvasElement, or HTMLVideoElement
- * @param frame format: [x, y, width, height, regX, regY]
+/** 
+ * Constructor.
  * @name Bitmap
- * @class Represent a bitmap, different from Bitmap in AS3, it can accept interaction.
+ * @class The Bitmap class represents bitmap images which are display objects. Different from Bitmap class in AS3, it can accept mouse interactions.
  * @augments DisplayObject
  * @property image The image source for bitmap.
  * @property frame A special frame of image to render. The format is [x, y, width, height, regX, regY].
+ * @param image Image data, can be HTMLImageElement, HTMLCanvasElement, or HTMLVideoElement
+ * @param frame format: [x, y, width, height, regX, regY]
  */ 
 var Bitmap = function(image, frame)
 {	

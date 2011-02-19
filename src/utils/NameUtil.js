@@ -26,18 +26,24 @@
 
 (function(){
 /**
- * NameUtil
+ * No Constructor, cannot be instantiated.
  * @name NameUtil
- * @class
+ * @class The NameUtil utility class defines static methods for creating names for objects in CasualJS Framework.
  */ 
 var NameUtil = { _counter:0 };
 casual.NameUtil = NameUtil;
 
+/**
+ * Gets a unique number id.
+ */
 NameUtil.getUID = function()
 {
 	return NameUtil._counter++;
 }
 
+/**
+ * Creates a unique name for any Object instance, such as "MovieClip12", by combining the unqualified class name with an incrementing counter.
+ */
 NameUtil.createUniqueName = function(name)
 {
 	//if end with a digit, then append an underscore before appending
@@ -46,6 +52,9 @@ NameUtil.createUniqueName = function(name)
     return name + NameUtil.getUID();
 }
 
+/**
+ * Returns a string, such as "Stage0.scene1.buttonContainer2.Sprite3", for a DisplayObject object that indicates its position in the ierarchy of DisplayObject objects in an application.
+ */
 NameUtil.displayObjectToString = function(displayObject)
 {
 	var result;

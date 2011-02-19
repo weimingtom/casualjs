@@ -26,9 +26,16 @@
 
 (function(){
 /**
- * Text implementation
+ * Constructor.
  * @name Text
- * @class
+ * @class The Text class provides basic methods to draw text onto Stage.
+ * @augments DisplayObject
+ * @property text The text string to be displayed.
+ * @property color The color of the text, default is "#000".
+ * @property font The font style for text, default is "12px Arial".
+ * @property align Indicates the alignment of the text paragraph, default is "start".
+ * @property outline A Boolean that indicates whether the text is outline or not, default is false.
+ * @property maxWidth Indicates the maximum width of the text paragraph.
  */
 var Text = function(text, color, font)
 {
@@ -38,8 +45,8 @@ var Text = function(text, color, font)
 	this.text = text;
 	this.color = color || "#000";
 	this.font = font || "12px Arial";
-	this.textAlign = "start";
-	this.textBaseline = "alphabetic";
+	this.align = "start";
+	this.baseline = "alphabetic";
 	this.maxWidth = null;
 	this.outline = false;
 	
@@ -47,6 +54,9 @@ var Text = function(text, color, font)
 casual.inherit(Text, casual.DisplayObject);
 casual.Text = Text;
 
+/**
+ * @private Internal render function overriding from DisplayObject.
+ */
 Text.prototype.render = function(context)
 {
 	if(!this.text || this.text.length == 0) return;
@@ -54,12 +64,15 @@ Text.prototype.render = function(context)
 	if(this.outline) context.strokeStyle = this.color;
 	else context.fillStyle = this.color;
 	context.font = this.font;
-	context.textAlign = this.textAlign;
-	context.textBaseline = this.textBaseline;
+	context.textAlign = this.align;
+	context.textBaseline = this.baseline;
 	if(this.outline) context.strokeText(this.text, 0, 0, this.maxWidth);
 	else context.fillText(this.text, 0, 0, this.maxWidth);
 }
 
+/**
+ * Gets the width of the text.
+ */
 Text.prototype.getWidth = function(context)
 {
 	if(!this.text || this.text.length == 0) return 0;

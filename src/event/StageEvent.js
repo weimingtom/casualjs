@@ -26,36 +26,43 @@
 
 (function(){
 /**
- * StageEvent
+ * Constructor.
  * @name StageEvent
- * @class
+ * @class A StageEvent object is dispatched whenever enter frame event or mouse events occur on Stage.
+ * @augments EventBase
+ * @property mouseX The x accordinate of mouse postion on Stage.
+ * @property mouseY The y accordinate of mouse postion on Stage.
  */ 
 var StageEvent = function(type, bubbles, cancelable)
 {
 	casual.EventBase.call(this, type, bubbles, cancelable);
 		
-	this.stageX = 0;
-	this.stageY = 0;
+	this.mouseX = 0;
+	this.mouseY = 0;
 }
 casual.inherit(StageEvent, casual.EventBase);
 casual.StageEvent = StageEvent;
 
-/**
- * Stage event types
- */
+//Stage event types
+/** Defines the value of the type property of a enter frame event object. */
 StageEvent.ENTER_FRAME = "enterframe";
+/** Defines the value of the type property of a mousedown event object. */
 StageEvent.MOUSE_DOWN = "mousedown";
+/** Defines the value of the type property of a mouseup event object. */
 StageEvent.MOUSE_UP = "mouseup";
+/** Defines the value of the type property of a mousemove event object. */
 StageEvent.MOUSE_MOVE = "mousemove";
+/** Defines the value of the type property of a mouseover event object. */
+StageEvent.MOUSE_OVER = "mouseover";
+/** Defines the value of the type property of a mouseout event object. */
+StageEvent.MOUSE_OUT = "mouseout";
 
-StageEvent.prototype.clone = function()
-{
-	return casual.EventBase.clone(this, StageEvent);
-}
-
+/**
+ * Returns a string of the StageEvent object.
+ */
 StageEvent.prototype.toString = function()
 {
-	return "[StageEvent type=" + this.type + ", stageX=" + this.stageX + ", stageY=" + this.stageY + "]";
+	return "[StageEvent type=" + this.type + ", mouseX=" + this.mouseX + ", mouseY=" + this.mouseY + "]";
 }
 
 })();

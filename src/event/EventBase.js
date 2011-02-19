@@ -26,38 +26,53 @@
 
 (function(){
 /**
- * Event base class
+ * Constructor. Creates an Event object to pass as a parameter to event listeners.
  * @name EventBase
- * @class
+ * @class The EventBase class is used as the base class for the creation of Event objects, which are passed as parameters to event listeners when an event occurs.
+ * @property type The type of event.
+ * @property target The event target.
+ * @property currentTarget The object that is actively processing the Event object with an event listener.
+ * @property params The passed parameters object to event listeners.
  */ 
 var EventBase = function(type, bubbles, cancelable)
 {
 	this.type = type;
-	
-	this.bubbles = bubbles != undefined ? bubbles : false; //TODO
-	this.cancelable = cancelable != undefined ? cancelable : false;	//TODO
-	
 	this.target = null;
 	this.currentTarget = null;	
 	this.params = null;
+	
+	this.bubbles = bubbles != undefined ? bubbles : false; //TODO Not implemented yet.
+	this.cancelable = cancelable != undefined ? cancelable : false;	//TODO Not implemented yet.
 }
 casual.EventBase = EventBase;
 
+/**
+ * @private Not implemented yet.
+ */
 EventBase.prototype.stopPropagation = function()
 {
 	//TODO
 }
 
+/**
+ * @private Not implemented yet.
+ */
 EventBase.prototype.preventDefault = function()
 {
 	//TODO
 }
 
+/**
+ * Duplicates an instance of the Event object.
+ */
 EventBase.prototype.clone = function()
 {
-	return EventBase.clone(this);
+	return casual.copy(this);
 }
 
+/**
+ * Deletes all properties of the Event object.
+ */
 EventBase.prototype.dispose = function()
 {
 	delete this.type;
@@ -66,6 +81,9 @@ EventBase.prototype.dispose = function()
 	delete this.params;
 }
 
+/**
+ * Returns a string of the Event object.
+ */
 EventBase.prototype.toString = function()
 {
 	return "[EventBase type=" + this.type + "]";

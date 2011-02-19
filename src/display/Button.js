@@ -26,16 +26,16 @@
 
 (function(){
 /**
- * Constructor
- * @param upState A display object for normal state
+ * Constructor.
+ * @name Button
+ * @class This class is the Button implementation in HTML5 Canvas.<br>You can specify mouse handlers for specific events. You can also change the appearance of the button by associating a different skin with each button state.
+ * @augments MovieClip
+ * @param upState A display object for normal state.
  * @param overState A display object for mouse over state, optional.
  * @param downState A display object for mouse down state, optional.
  * @param disabledState A display object for disabled state, optional.
- * @name Button
- * @class Button implementation in HTML5 Canvas.
- * @augments MovieClip
  * @property state Current button state name.
- * @property enabled Indicate whether the button can accept mouse events.
+ * @property enabled A Boolean value that indicates whether the button can accept mouse events. 
  */
 var Button = function(upState, overState, downState, disabledState)
 {
@@ -63,18 +63,30 @@ casual.Button = Button;
 
 Button.state = 
 {
-	/** @memberOf Button */
+	/** 
+	 * @description State constant of "up".
+	 * @memberOf Button 
+	 */
 	UP: "up",
-	/** @memberOf Button */
+	/** 
+	 * @description State constant of "over".
+	 * @memberOf Button
+	 */
 	OVER: "over",
-	/** @memberOf Button */
+	/** 
+	 * @description State constant of "down".
+	 * @memberOf Button
+	 */
 	DOWN: "down",
-	/** @memberOf Button */
+	/** 
+	 * @description State constant of "disabled".
+	 * @memberOf Button
+	 */
 	DISABLED: "disabled"
 }
 
 /**
- * Set display object for the normal state.
+ * Sets display object for the normal state.
  */
 Button.prototype.setUpState = function(upState)
 {
@@ -85,7 +97,7 @@ Button.prototype.setUpState = function(upState)
 }
 
 /**
- * Set display object for the mouse over state.
+ * Sets display object for the mouse over state.
  */
 Button.prototype.setOverState = function(overState)
 {
@@ -96,7 +108,7 @@ Button.prototype.setOverState = function(overState)
 }
 
 /**
- * Set display object for the mouse down state.
+ * Sets display object for the mouse down state.
  */
 Button.prototype.setDownState = function(downState)
 {
@@ -107,7 +119,7 @@ Button.prototype.setDownState = function(downState)
 }
 
 /**
- * Set display object for the disbaled state.
+ * Sets display object for the disbaled state.
  */
 Button.prototype.setDisabledState = function(disabledState)
 {
@@ -118,7 +130,7 @@ Button.prototype.setDisabledState = function(disabledState)
 }
 
 /**
- * Enable or disable the button.
+ * Enables or disables the button.
  */
 Button.prototype.setEnabled = function(enabled)
 {
@@ -136,7 +148,7 @@ Button.prototype.setEnabled = function(enabled)
 }
 
 /**
- * Set the button's state name. Developers can use it to change button state manually.
+ * Sets the button's state name. Developers can use it to change button state manually.
  */
 Button.prototype.setState = function(state)
 {
@@ -197,11 +209,17 @@ Button.prototype.onMouseEvent = function(e)
 	}
 }
 
+/**
+ * A Handler for mouse move event. Default is null.
+ * @function
+ * @param event
+ */
 Button.prototype.onMouseMove = null;
 
 /**
  * A Handler for mouse over event. Default is null.
  * @function
+ * @default null
  * @param event
  */
 Button.prototype.onMouseOver = null;

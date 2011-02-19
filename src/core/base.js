@@ -24,10 +24,10 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * Base of Casual Framework
+/** 
+ * No Constructor, cannot be instantiated.
  * @name casual
- * @class
+ * @class Basic object of Casual Framework, provides some core functions.
  */
 var casual = {};
 
@@ -43,7 +43,7 @@ casual.trace = function()
 };
 
 /**
- * Inheritance implementation for Javascript
+ * Inheritance implementation for Javascript.
  */
 casual.inherit = function(childClass, parentClass) 
 {
@@ -55,7 +55,7 @@ casual.inherit = function(childClass, parentClass)
 };
 
 /**
- * Delegation 'this' for functions
+ * Delegate the reference of this within functions.
  */
 casual.delegate = function(func, self, args)
 {
@@ -75,6 +75,9 @@ casual.delegate = function(func, self, args)
   	}
 };
 
+/**
+ * Make a copy of the parameter obj, you also can specify the target class.
+ */
 casual.copy = function(obj, targetClass)
 {
 	//base type
@@ -101,9 +104,12 @@ casual.copy = function(obj, targetClass)
 	return o;
 };
 
-casual.__cloneFunc = function() {};
+/**
+ * Make a new object which is the same type as the parameter obj.
+ */
 casual.clone = function(obj)
 {
 	casual.__cloneFunc.prototype = obj;
 	return new casual.__cloneFunc();
 };
+casual.__cloneFunc = function() {};

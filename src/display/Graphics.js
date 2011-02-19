@@ -26,9 +26,9 @@
 
 (function(){
 /**
- * Graphics
+ * Constructor.
  * @name Graphics
- * @class
+ * @class The Graphics class contains a set of methods that you can use to create a vector shape.
  */ 
 var Graphics = function()
 {
@@ -44,13 +44,18 @@ var Graphics = function()
 }
 casual.Graphics = Graphics;
 
-
+/**
+ * @private
+ */
 Graphics.prototype._proxy = function(context, func, alias)
 {	
 	this[func] = function(){return context[func].apply(context, arguments) || this};
 	if(alias) this[alias] = this[func];
 }
 
+/**
+ * @private
+ */
 Graphics._init = function(g, context)
 {	
 	g._proxy(context, "beginPath");
@@ -77,6 +82,9 @@ Graphics._init = function(g, context)
 	g.lineWidth = 1;
 }
 
+/**
+ * Specifies a line style that Canvas uses for subsequent calls to other Graphics methods (such as lineTo() or drawCircle()) for the object.
+ */
 Graphics.prototype.lineStyle = function(thickness, lineColor, alpha, lineCap, lineJoin, miterLimit)
 {
 	this.lineWidth = this._context.lineWidth = thickness || 1;
@@ -88,6 +96,9 @@ Graphics.prototype.lineStyle = function(thickness, lineColor, alpha, lineCap, li
 	return this;
 }
 
+/**
+ * Specifies a linear gradient fill that subsequent calls to other Graphics methods (such as lineTo() or drawCircle()) use when drawing.
+ */
 Graphics.prototype.beginLinearGradientFill = function(x0, y0, x1, y1, colors, ratios)
 {
 	var gradient = this.createLinearGradient(x0, y0, x1, y1);
@@ -99,6 +110,9 @@ Graphics.prototype.beginLinearGradientFill = function(x0, y0, x1, y1, colors, ra
 	return this;
 }
 
+/**
+ * Specifies a radial gradient fill that subsequent calls to other Graphics methods (such as lineTo() or drawCircle()) use when drawing.
+ */
 Graphics.prototype.beginRadialGradientFill = function(x0, y0, r0, x1, y1, r1, colors, ratios)
 {
 	var gradient = this.createRadialGradient(x0, y0, r0, x1, y1, r1);
@@ -110,6 +124,9 @@ Graphics.prototype.beginRadialGradientFill = function(x0, y0, r0, x1, y1, r1, co
 	return this;
 }
 
+/**
+ * Fills a drawing area with a bitmap image.
+ */
 Graphics.prototype.beginBitmapFill = function(image, repetition)
 {
 	repetition = repetition || "";
@@ -117,6 +134,9 @@ Graphics.prototype.beginBitmapFill = function(image, repetition)
 	return this;
 }
 
+/**
+ * Specifies an available fill that subsequent calls to other Graphics methods (such as lineTo() or drawCircle()) use when drawing.
+ */
 Graphics.prototype.beginFill = function(fill, alpha)
 {
 	if(fill) 
@@ -128,6 +148,9 @@ Graphics.prototype.beginFill = function(fill, alpha)
 	return this;
 }
 
+/**
+ * Applies a fill to the lines and curves that were added.
+ */
 Graphics.prototype.endFill = function()
 {
 	if(this.strokeStyle) 
@@ -145,6 +168,9 @@ Graphics.prototype.endFill = function()
 	return this;
 }
 
+/**
+ * Draws a rectangle.
+ */
 Graphics.prototype.drawRect = function(x, y, width, height)
 {
 	this.beginPath();
@@ -154,11 +180,17 @@ Graphics.prototype.drawRect = function(x, y, width, height)
 	return this;
 }
 
+/**
+ * Draws a rounded rectangle.
+ */
 Graphics.prototype.drawRoundRect = function(x, y, width, height, cornerSize)
 {
 	return this.drawRoundRectComplex(x, y, width, height, cornerSize, cornerSize, cornerSize, cornerSize);
 }
 
+/**
+ * Draws a complex rounded rectangle.
+ */
 Graphics.prototype.drawRoundRectComplex = function(x, y, width, height, cornerTL, cornerTR, cornerBR, cornerBL)
 {
 	this.beginPath();
@@ -176,6 +208,9 @@ Graphics.prototype.drawRoundRectComplex = function(x, y, width, height, cornerTL
 	return this;
 }
 
+/**
+ * Draws a circle.
+ */
 Graphics.prototype.drawCircle = function(x, y, radius)
 {
 	this.beginPath();
@@ -185,6 +220,9 @@ Graphics.prototype.drawCircle = function(x, y, radius)
 	return this;
 }
 
+/**
+ * Draws a ellipse.
+ */
 Graphics.prototype.drawEllipse = function(x, y, width, height)
 {
 	if(width == height) return this.drawCircle(x, y, width);
@@ -206,11 +244,17 @@ Graphics.prototype.drawEllipse = function(x, y, width, height)
     return this;
 }
 
+/**
+ * Gets the drawable graphics image. Here is a canvas.
+ */
 Graphics.prototype.get = function()
 {
 	return this._context.canvas;
 }
 
+/**
+ * Sets the predefined canvas size.
+ */
 Graphics.prototype.setSize = function(width, height)
 {	
 	this._context.save();
@@ -220,6 +264,9 @@ Graphics.prototype.setSize = function(width, height)
 	return this;
 }
 
+/**
+ * Clears all grapchis that were drawn.
+ */
 Graphics.prototype.clear = function()
 {
 	this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);

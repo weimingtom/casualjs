@@ -26,10 +26,11 @@
 
 (function(){
 /**
- * Shape
- * Known issue: width/height are 0, need to be specified manually
+ * Constructor.
  * @name Shape
- * @class
+ * @class The Shape class includes a graphics property, which lets you create shapes and graphics. Known issue: the width and height are 0, need to be specified manually.
+ * @augments DisplayObject
+ * @property graphics Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
  */ 
 var Shape = function(graphics)
 {	
@@ -41,6 +42,9 @@ var Shape = function(graphics)
 casual.inherit(Shape, casual.DisplayObject);
 casual.Shape = Shape;
 
+/**
+ * @private
+ */
 Shape.prototype.render = function(context)
 {
 	context.drawImage(this.graphics.get(), 0, 0);

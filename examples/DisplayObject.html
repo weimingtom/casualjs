@@ -84,7 +84,6 @@ function start()
 	stage.addChild(mylogo);
 
 	stage.addEventListener(StageEvent.ENTER_FRAME, enterFrameHandler);
-	stage.addEventListener(StageEvent.MOUSE_DOWN, mouseDownHandler);
 }
 
 function enterFrameHandler(e)
@@ -95,11 +94,6 @@ function enterFrameHandler(e)
 	rotateBmp.alpha += b%2 ? 0.05 : -0.05;
 	if(rotateBmp.alpha <=0.05) rotateBmp.alpha = 0.05;
 	rotateBmp.rotation = rotateBmp.rotation + 18;
-}
-
-function mouseDownHandler(e)
-{	
-	//trace("click:", e.stageX, e.stageY);
 }
 </script>
 

@@ -26,10 +26,10 @@
 
 (function(){
 /**
- * The root of display object list.
+ * Constructor.
  * @name Stage
- * @class
- * @augments DisplayObjectContainer
+ * @class The Stage represents the entire area of canvas where display contents are shown. The Stage is the root of all display objects.
+ * @augments DisplayObjectContainer 
  * @property context Refer to the working context.
  * @property canvas Refer to the working canvas.
  * @property mouseX The x coordinate of mouse position on stage.
@@ -75,6 +75,9 @@ var Stage = function(context)
 casual.inherit(Stage, casual.DisplayObjectContainer);
 casual.Stage = Stage;
 
+/**
+ * Determines whether start or stop rendering of the stage.
+ */
 Stage.prototype.setPaused = function(pause, pauseInNextFrame)
 {
 	if(this._paused == pause) return;
@@ -83,11 +86,25 @@ Stage.prototype.setPaused = function(pause, pauseInNextFrame)
 	this._pauseInNextFrame = pauseInNextFrame || false;
 }
 
+/**
+ * Gets whether the stage stops rendering.
+ */
 Stage.prototype.getPaused = function()
 {
 	return this._paused;
 }
 
+/**
+ * Gets the frame rate of the stage.
+ */
+Stage.prototype.getFrameRate = function()
+{
+	return this._frameRate;
+}
+
+/**
+ * Sets the frame rate of the stage.
+ */
 Stage.prototype.setFrameRate = function(frameRate)
 {
 	if(this._frameRate == frameRate) return;
@@ -96,6 +113,9 @@ Stage.prototype.setFrameRate = function(frameRate)
 	this.__intervalID = setInterval(casual.delegate(this.__enterFrame, this), 1000/this._frameRate);
 }
 
+/**
+ * @private
+ */
 Stage.prototype.__mouseHandler = function(event)
 {
 	this.mouseX = event.pageX - this.canvas.offsetLeft;
@@ -112,8 +132,8 @@ Stage.prototype.__mouseHandler = function(event)
 	//stage event
 	var e = casual.copy(event, casual.StageEvent);
 	e.target = e.currentTarget = this.mouseTarget || this;
-	e.stageX = this.mouseX;
-	e.stageY = this.mouseY;
+	e.mouseX = this.mouseX;
+	e.mouseY = this.mouseY;
 
 	//if onMouseEvent is defined for mouseTarget, trigger it...
 	if(this.mouseTarget && this.mouseTarget.onMouseEvent) this.mouseTarget.onMouseEvent(e);
@@ -128,6 +148,9 @@ Stage.prototype.__mouseHandler = function(event)
   	event.stopPropagation();
 }
 
+/**
+ * @private
+ */
 Stage.prototype.__getMouseTarget = function(event)
 {
 	var obj = this.getObjectUnderPoint(this.mouseX, this.mouseY, true);
@@ -138,12 +161,15 @@ Stage.prototype.__getMouseTarget = function(event)
 		var e = casual.copy(event, casual.StageEvent);
 		e.type = "mouseout";
 		e.target = e.currentTarget = oldObj;
-		e.stageX = this.mouseX;
-		e.stageY = this.mouseY;
+		e.mouseX = this.mouseX;
+		e.mouseY = this.mouseY;
 		oldObj.onMouseEvent(e);	
 	}	
 }
 
+/**
+ * @private
+ */
 Stage.prototype.__enterFrame = function()
 {
 	if(this._paused && !this._pauseInNextFrame) return;
@@ -159,7 +185,8 @@ Stage.prototype.__enterFrame = function()
 }
 
 /**
- * Each render called, the stage will render the entire display list to canvas.
+ * Each rendering is called, the stage will refresh the entire display list to canvas.
+ * @private
  */
 Stage.prototype.render = function(context)
 {	
@@ -181,6 +208,9 @@ Stage.prototype.render = function(context)
 	}
 }
 
+/**
+ * Lets the user drag the specified display object.
+ */
 Stage.prototype.startDrag = function(target, bounds)
 {
 	this.dragTarget = target;
@@ -188,19 +218,25 @@ Stage.prototype.startDrag = function(target, bounds)
 	//this._bounds = bounds; //TODO: restrict dragging area
 }
 
+/**
+ * Ends the startDrag() method.
+ */
 Stage.prototype.stopDrag = function()
 {
 	this.dragTarget = null;
 	//this.setCursor("");
 }
 
+/**
+ * Sets the mouse cursor type of the stage.
+ */
 Stage.prototype.setCursor = function(cursor)
 {
 	this.canvas.style.cursor = cursor;
 }
 
 /**
- * Clear the canvas by specific rectangle, if not set, clear the whole canvas
+ * Clears the canvas by specific rectangle, if not set, clear the whole canvas
  */
 Stage.prototype.clear = function(x, y, width, height)
 {
@@ -208,19 +244,20 @@ Stage.prototype.clear = function(x, y, width, height)
 	else this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 }
 
+/**
+ * The current width of the Stage.
+ */
 Stage.prototype.getStageWidth = function()
 {
 	return this.canvas.width;
 }
 
+/**
+ * The current height of the Stage.
+ */
 Stage.prototype.getStageHeight = function()
 {
 	return this.canvas.height;
-}
-
-Stage.prototype.getFrameRate = function()
-{
-	return this._frameRate;
 }
 
 })();

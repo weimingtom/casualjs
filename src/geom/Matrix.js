@@ -26,9 +26,15 @@
 
 (function(){
 /**
- * Matrix
+ * Constructor.
  * @name Matrix
- * @class
+ * @class The Matrix class represents a transformation matrix that determines how to map points from one coordinate space to another.
+ * @property a The value that affects the positioning of pixels along the x axis when scaling or rotating an image.
+ * @property b The value that affects the positioning of pixels along the y axis when rotating or skewing an image.
+ * @property c The value that affects the positioning of pixels along the x axis when rotating or skewing an image.
+ * @property d The value that affects the positioning of pixels along the y axis when scaling or rotating an image.
+ * @property tx The distance by which to translate each point along the x axis.
+ * @property ty The distance by which to translate each point along the y axis.
  */ 
 var Matrix = function(a, b, c, d, tx, ty)
 {
@@ -41,6 +47,9 @@ var Matrix = function(a, b, c, d, tx, ty)
 }
 casual.Matrix = Matrix;
 
+/**
+ * Concatenates a matrix with the current matrix, effectively combining the geometric effects of the two.
+ */
 Matrix.prototype.concat = function(mtx)
 {
 	var a = this.a;
@@ -55,6 +64,9 @@ Matrix.prototype.concat = function(mtx)
 	this.ty = tx * mtx.b + this.ty * mtx.d + mtx.ty;
 }
 
+/**
+ * Concatenates a transformation with the current matrix, effectively combining the geometric effects of the two.
+ */
 Matrix.prototype.concatTransform = function(x, y, scaleX, scaleY, rotation, regX, regY)
 {
 	var cos = 1;
@@ -71,6 +83,9 @@ Matrix.prototype.concatTransform = function(x, y, scaleX, scaleY, rotation, regX
 	this.concat(new Matrix(cos*scaleX, sin*scaleX, -sin*scaleY, cos*scaleY, x, y));
 }
 
+/**
+ * Applies a rotation transformation to the Matrix object.
+ */
 Matrix.prototype.rotate = function(angle)
 {
 	var cos = Math.cos(angle);
@@ -88,6 +103,9 @@ Matrix.prototype.rotate = function(angle)
 	this.ty = tx * sin + this.ty * cos;
 }
 
+/**
+ * Applies a scaling transformation to the matrix.
+ */
 Matrix.prototype.scale = function(sx, sy)
 {
 	this.a *= sx;
@@ -96,18 +114,27 @@ Matrix.prototype.scale = function(sx, sy)
 	this.ty *= sy;
 }
 
+/**
+ * Translates the matrix along the x and y axes, as specified by the dx and dy parameters.
+ */
 Matrix.prototype.translate = function(dx, dy)
 {
 	this.tx += dx;
 	this.ty += dy;
 }
 
+/**
+ * Sets each matrix property to a value that causes a null transformation.
+ */
 Matrix.prototype.identity = function()
 {
 	this.a = this.d = 1;
 	this.b = this.c = this.tx = this.ty = 0;
 }
 
+/**
+ * Performs the opposite transformation of the original matrix.
+ */
 Matrix.prototype.invert = function()
 {
 	var a = this.a;
@@ -125,11 +152,17 @@ Matrix.prototype.invert = function()
 	this.ty = -(a * this.ty - b * tx) / i;
 }
 
+/**
+ * Returns a new Matrix object that is a clone of this matrix, with an exact copy of the contained object.
+ */
 Matrix.prototype.clone = function()
 {
 	return new Matrix(this.a, this.b, this.c, this.d, this.tx, this.ty);
 }
 
+/**
+ * Returns a text value listing the properties of the Matrix object.
+ */
 Matrix.prototype.toString = function()
 {
 	return "(a="+this.a+", b="+this.b+", c="+this.c+", d="+this.d+", tx="+this.tx+", ty="+this.ty+")";

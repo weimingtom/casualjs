@@ -26,9 +26,14 @@
 
 (function(){
 /**
- * Represent a frame for a MovieClip.
+ * Constructor.
  * @name Frame
- * @class
+ * @class The Frame class represents a frame in a MovieClip.
+ * @property disObj The display object of the frame.
+ * @property label The label of the frame.
+ * @property gotoFrame Specify a frame the playhead moves to, it can be either frameNumber or frameLabel.
+ * @property pauseFrames Specify the number of frames to pause.
+ * @property stop A Boolean indicates whether stop after this frame.
  */
 var Frame = function(disObj, label, gotoFrame, pauseFrames, stop)
 {
@@ -36,12 +41,12 @@ var Frame = function(disObj, label, gotoFrame, pauseFrames, stop)
 	this.label = label || null; //label for the frame
 	this.gotoFrame = gotoFrame || 0; //can be either frameNumber or frameLabel
 	this.pauseFrames = pauseFrames || 0; //number of frames to pause
-	this.stop = stop || false; //whether stop when play to this frame	
+	this.stop = stop || false; //whether stop after this frame
 }
 casual.Frame = Frame;
 
 /**
- * Simple render interface
+ * Simple render interface.
  */
 Frame.prototype.render = function(context, x, y)
 {

@@ -26,13 +26,13 @@
 
 (function(){
 /**
- * Color encapsulation
+ * Constructor.
+ * @name Color
+ * @class The Color class provides methods for manipulating colors.
  * @param r red 0-255
  * @param g green 0-255
  * @param b blue 0-255
  * @param a alpha 0-1
- * @name Color
- * @class
  */
 var Color = function(r, g, b, a)
 {
@@ -43,16 +43,25 @@ var Color = function(r, g, b, a)
 }
 casual.Color = Color;
 
+/**
+ * Returns the R+G+B combination currently in use by the color object.
+ */
 Color.prototype.getRGB = function()
 {
 	return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
 }
 
+/**
+ * Returns the R+G+B+A combination currently in use by the color object.
+ */
 Color.prototype.getRGBA = function()
 {
 	return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')';
 }
 
+/**
+ * Returns the HEX string currently in use by the color object.
+ */
 Color.prototype.getHEX = function()
 {
 	var r = this.r.toString(16);
@@ -64,12 +73,18 @@ Color.prototype.getHEX = function()
     return r.toUpperCase() + g.toUpperCase() + b.toUpperCase();
 }
 
+/**
+ * Converts the color to grayscale mode.
+ */
 Color.prototype.toGrayscale = function()
 {
 	var average = parseInt((this.r * 0.3 + this.g * 0.59 + this.b * 0.11).toFixed(0), 10);
    	this.r = this.g = this.b = average;
 }
 
+/**
+ * Converts the color to black and white mode.
+ */
 Color.prototype.toBlackWhite = function(threshold)
 {
 	threshold = threshold || 127;

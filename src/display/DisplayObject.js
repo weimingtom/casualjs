@@ -26,14 +26,34 @@
 
 (function(){
 /**
- * Abstract class for a display object, it should not be constructed directly.
+ * Constructor.
  * @name DisplayObject
- * @class
+ * @class The DisplayObject class is the base class for all objects that can be placed on the canvas.<br>DisplayObject is an abstract base class, therefore, you cannot call DisplayObject directly.<br>All display objects should inherit from the DisplayObject class, and implement the render() method.
+ * @augments EventDispatcher
+ * @property id Indicates the instance id of the DisplayObject.
+ * @property name Indicates the instance name of the DisplayObject.
+ * @property x Indicates the x coordinate of the DisplayObject instance relative to the local coordinates of the parent DisplayObjectContainer.
+ * @property y Indicates the y coordinate of the DisplayObject instance relative to the local coordinates of the parent DisplayObjectContainer.
+ * @property width Indicates the width of the display object, in pixels.
+ * @property height Indicates the height of the display object, in pixels.
+ * @property regX Indicates the x coordinate of registration point of the display object.
+ * @property regY Indicates the x coordinate of registration point of the display object.
+ * @property scaleX Indicates the horizontal scale (percentage) of the object as applied from the registration point.
+ * @property scaleY Indicates the vertical scale (percentage) of an object as applied from the registration point of the object.
+ * @property alpha Indicates the alpha transparency value of the object specified.
+ * @property rotation Indicates the rotation of the DisplayObject instance, in degrees, from its original orientation.
+ * @property visible Whether or not the display object is visible.
+ * @property mouseEnabled Specifies whether this object receives mouse messages.
+ * @property useHandCursor A Boolean value that indicates whether the pointing hand (hand cursor) appears when the mouse rolls over the display object.
+ * @property parent The reference of the DisplayObjectContainer object that contains this display object.
+ * @property stage The reference of the Stage of the display object.
  */
 var DisplayObject = function()
 {
-	this.id = null;
-	this.name = null;	
+	casual.EventDispatcher.call(this);
+	this.name = NameUtil.createUniqueName("DisplayObject");
+	
+	this.id = null;	
 	this.x = 0;
 	this.y = 0;
 	this.width = 0;
@@ -59,16 +79,25 @@ canvas.width = canvas.height = 1;
 DisplayObject.__hitTestContext = canvas.getContext("2d");
 DisplayObject.__hitTestTolerance = 50;
 
+/**
+ * Gets the scaled width of the display object currently, in pixels.
+ */
 DisplayObject.prototype.getCurrentWidth = function()
 {
-	return Math.abs(this.width*this.scaleX);
+	return Math.abs(this.width * this.scaleX);
 }
 
+/**
+ * Gets the scaled height of the display object currently, in pixels.
+ */
 DisplayObject.prototype.getCurrentHeight = function()
 {
-	return Math.abs(this.height*this.scaleY);
+	return Math.abs(this.height * this.scaleY);
 }
 
+/**
+ * Gets the stage reference, rather than using DisplayObject.stage, you'd better use DisplayObject.getStage().
+ */
 DisplayObject.prototype.getStage = function()
 {
 	if(this.stage) return this.stage;
@@ -78,6 +107,9 @@ DisplayObject.prototype.getStage = function()
 	return null;
 }
 
+/**
+ * Converts the (x, y) point from the display object's (local) coordinates to the Stage (global) coordinates.
+ */
 DisplayObject.prototype.localToGlobal = function(x, y)
 {
 	var cm = this.getConcatenatedMatrix();
@@ -87,6 +119,9 @@ DisplayObject.prototype.localToGlobal = function(x, y)
 	return {x:m.tx, y:m.ty};
 }
 
+/**
+ * Converts the (x, y) point from the Stage (global) coordinates to the display object's (local) coordinates.
+ */
 DisplayObject.prototype.globalToLocal = function(x, y) 
 {
 	var cm = this.getConcatenatedMatrix();
@@ -97,12 +132,18 @@ DisplayObject.prototype.globalToLocal = function(x, y)
 	return {x:m.tx, y:m.ty};
 }
 
+/**
+ * Converts the (x, y) point from the display object's (local) coordinates to the target object's coordinates.
+ */
 DisplayObject.prototype.localToTarget = function(x, y, target) 
 {
 	var p = localToGlobal(x, y);
 	return target.globalToLocal(p.x, p.y);
 }
 
+/**
+ * @private
+ */
 DisplayObject.prototype.getConcatenatedMatrix = function() 
 {
 	//TODO: cache the concatenated matrix to get better performance
@@ -115,6 +156,9 @@ DisplayObject.prototype.getConcatenatedMatrix = function()
 	return mtx;
 }
 
+/**
+ * @private
+ */
 DisplayObject.prototype._transform = function(context, toGlobal)
 {	
 	if(toGlobal)
@@ -149,10 +193,13 @@ DisplayObject.prototype._render = function(context, noTransform, globalTransform
 }
 
 /**
- * The real rendering workhorse, normally it should be overridden by subclass.
+ * The real rendering workhorse, it should be overridden by subclasses.
  */
 DisplayObject.prototype.render = function(context) { };
 
+/**
+ * Evaluates the display object to see if it overlaps or intersects with the point specified by the x and y parameters.
+ */
 DisplayObject.prototype.hitTestPoint = function(x, y, usePixelCollision, tolerance)
 {	
 	if(!usePixelCollision)
@@ -189,9 +236,16 @@ DisplayObject.prototype.hitTestPoint = function(x, y, usePixelCollision, toleran
 	return result;
 }
 
-//this only works when Stage.traceMouseTarget=true
+/**
+ * A handler for mouse events. It only works when Stage.traceMouseTarget=true. Default is null.
+ * @function
+ * @param event
+ */
 DisplayObject.prototype.onMouseEvent = null;
 
+/**
+ * Returns the string representation of the specified DisplayObject.
+ */
 DisplayObject.prototype.toString = function()
 {
 	return NameUtil.displayObjectToString(this);

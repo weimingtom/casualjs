@@ -65,7 +65,7 @@ function start()
 	label.y = 150;
 	label.color = "#fff";
 	label.font = "18px Arial";
-	label.textAlign = "start";
+	label.align = "start";
 	label.text = "                         Please try to click on top buttons";
 	stage.addChild(label);		
 	
@@ -93,7 +93,7 @@ function start()
 
 function mouseHandler(e)
 {
-	label.text = "Event type=" + e.type + ", target=" + this + ", stageX=" + e.stageX + ", stageY=" + e.stageY;
+	label.text = "Event type=" + e.type + ", target=" + this + ", mouseX=" + e.mouseX + ", mouseY=" + e.mouseY;
 }
 
 </script>
