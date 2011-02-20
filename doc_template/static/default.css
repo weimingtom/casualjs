@@ -9,9 +9,28 @@ body
 #header
 {
 	clear: both;
-	background: #fff;
-	height: 0px;
-	margin-bottom: 0px;
+	background: #2f323e;
+	height: 70px;
+	margin-bottom: 20px;
+}
+
+#header a
+{
+	color: #222;
+	display: block;
+	text-decoration: none;
+	height: 18px;
+}
+
+a
+{
+	color: #222;
+}
+
+a:hover
+{
+	color: #999;
+	text-decoration:none;
 }
 
 h1
@@ -24,7 +43,7 @@ h1
 hr
 {
 	border: none 0;
-	border-top: 1px solid #7F8FB1;
+	border-top: 1px solid #2f323e;
 	height: 1px;
 }
 
@@ -38,16 +57,16 @@ pre.code
 #index
 {
 	float: left;
-	width: 180px;
+	width: 200px;
 	position: absolute;
-	left: 8px;
+	left: 10px;
 	background-color: #F3F3F3;
-	padding: 8px;
+	padding: 0px;
 }
 
 #content
 {
-	margin: 0 8px 0 220px;
+	margin: 0 8px 0 240px;
 }
 
 .classList
@@ -77,12 +96,12 @@ h1.classTitle
 h2 { font-size: 110%; }
 caption, div.sectionTitle
 {
-	background-color: #627C9D;
+	background-color: #2f323e;
 	color: #fff;
 	font-size:130%;
 	text-align: left;
 	padding: 2px 6px 2px 6px;
-	border: 1px #627C9D solid;
+	border: 1px #2f323e solid;
 }
 
 div.sectionTitle { margin-bottom: 8px; }
@@ -92,14 +111,14 @@ div.sectionTitle { margin-bottom: 8px; }
 {
 	vertical-align: top;
 	padding: 4px;
-	border-bottom: 1px #7F8FB1 solid;
-	border-right: 1px #7F8FB1 solid;
+	border-bottom: 1px #2f323e solid;
+	border-right: 1px #2f323e solid;
 }
 
 /*col#summaryAttributes {}*/
 .summaryTable td.attributes
 {
-	border-left: 1px #7F8FB1 solid;
+	border-left: 1px #2f323e solid;
 	width: 140px;
 	text-align: right;
 }
@@ -107,7 +126,7 @@ div.sectionTitle { margin-bottom: 8px; }
 td.attributes, .fixedFont
 {
 	line-height: 15px;
-	color: #002EBE;
+	color: #2f323e;
 	font-family: "Courier New",Courier,monospace;
 	font-size: 13px;
 }
