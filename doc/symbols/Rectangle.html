@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>CasualJS Framework Reference - casual</title>
+		<title>CasualJS Framework Reference - Rectangle</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -260,7 +260,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class casual
+				Class Rectangle
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -268,13 +268,13 @@ ul.inheritsList
 				
 				
 			
-				Basic object of Casual Framework, provides some core functions.
+				The Rectangle object is an area defined by its position.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class casual.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Rectangle.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -287,9 +287,9 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/casual.html#constructor">casual</a></b>()
+								<b><a href="../symbols/Rectangle.html#constructor">Rectangle</a></b>()
 							</div>
-							<div class="description">No Constructor, cannot be instantiated.</div>
+							<div class="description">Constructor.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -298,12 +298,70 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class Rectangle.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/Rectangle.html#height">height</a></b>
+								</div>
+								<div class="description">The height of the rectangle.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/Rectangle.html#width">width</a></b>
+								</div>
+								<div class="description">The width of the rectangle.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/Rectangle.html#x">x</a></b>
+								</div>
+								<div class="description">The horizontal coordinate of the rectangle.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/Rectangle.html#y">y</a></b>
+								</div>
+								<div class="description">The vertical coordinate of the rectangle.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class casual.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Rectangle.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -314,47 +372,38 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">casual.<b><a href="../symbols/casual.html#.clone">clone</a></b>(obj)
+								<div class="fixedFont"><b><a href="../symbols/Rectangle.html#clone">clone</a></b>()
 								</div>
-								<div class="description">Make a new object which is the same type as the parameter obj.</div>
+								<div class="description">Creates a copy of this Rectangle object.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">casual.<b><a href="../symbols/casual.html#.copy">copy</a></b>(obj, targetClass)
+								<div class="fixedFont"><b><a href="../symbols/Rectangle.html#intersection">intersection</a></b>(rect)
 								</div>
-								<div class="description">Make a copy of the parameter obj, you also can specify the target class.</div>
+								<div class="description">Computes the intersection of this rectangle and the rectangle parameter.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">casual.<b><a href="../symbols/casual.html#.delegate">delegate</a></b>(func, self, args)
+								<div class="fixedFont"><b><a href="../symbols/Rectangle.html#intersects">intersects</a></b>(rect)
 								</div>
-								<div class="description">Delegate the reference of this within functions.</div>
+								<div class="description">Returns whether this rectangle intersects the rectangle parameter.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">casual.<b><a href="../symbols/casual.html#.inherit">inherit</a></b>(childClass, parentClass)
+								<div class="fixedFont"><b><a href="../symbols/Rectangle.html#toString">toString</a></b>()
 								</div>
-								<div class="description">Inheritance implementation for Javascript.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">casual.<b><a href="../symbols/casual.html#.trace">trace</a></b>()
-								</div>
-								<div class="description">Like trace() in as3, for debug purpose.</div>
+								<div class="description">Returns a string that represent this Rectangle object.</div>
 							</td>
 						</tr>
 					
@@ -375,11 +424,11 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>casual</b>()
+						<b>Rectangle</b>()
 				</div>
 				
 				<div class="description">
-					No Constructor, cannot be instantiated.
+					Constructor.
 					
 				</div>
 				
@@ -399,6 +448,99 @@ ul.inheritsList
 
 <!-- ============================== field details ========================== -->		
 			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="height"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>height</b>
+					
+					</div>
+					<div class="description">
+						The height of the rectangle.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="width"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>width</b>
+					
+					</div>
+					<div class="description">
+						The width of the rectangle.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="x"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>x</b>
+					
+					</div>
+					<div class="description">
+						The horizontal coordinate of the rectangle.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="y"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>y</b>
+					
+					</div>
+					<div class="description">
+						The vertical coordinate of the rectangle.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
+			
 
 <!-- ============================== method details ========================= -->		
 			
@@ -406,15 +548,40 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name=".clone"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="clone"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">casual.</span><b>clone</b>(obj)
+					<b>clone</b>()
 					
 					</div>
 					<div class="description">
-						Make a new object which is the same type as the parameter obj.
+						Creates a copy of this Rectangle object.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="intersection"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>intersection</b>(rect)
+					
+					</div>
+					<div class="description">
+						Computes the intersection of this rectangle and the rectangle parameter.
 						
 						
 					</div>
@@ -426,10 +593,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>obj</b>
+									<b>rect</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>A Rectangle.</dd>
 							
 							</dl>
 						
@@ -442,15 +609,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name=".copy"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="intersects"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">casual.</span><b>copy</b>(obj, targetClass)
+					<b>intersects</b>(rect)
 					
 					</div>
 					<div class="description">
-						Make a copy of the parameter obj, you also can specify the target class.
+						Returns whether this rectangle intersects the rectangle parameter.
 						
 						
 					</div>
@@ -462,16 +629,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>obj</b>
+									<b>rect</b>
 									
 								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>targetClass</b>
-									
-								</dt>
-								<dd></dd>
+								<dd>A Rectangle.</dd>
 							
 							</dl>
 						
@@ -484,105 +645,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name=".delegate"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="toString"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">casual.</span><b>delegate</b>(func, self, args)
-					
-					</div>
-					<div class="description">
-						Delegate the reference of this within functions.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>func</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>self</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>args</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".inherit"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">casual.</span><b>inherit</b>(childClass, parentClass)
+					<b>toString</b>()
 					
 					</div>
 					<div class="description">
-						Inheritance implementation for Javascript.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>childClass</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>parentClass</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".trace"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">casual.</span><b>trace</b>()
-					
-					</div>
-					<div class="description">
-						Like trace() in as3, for debug purpose. you can just use trace().
+						Returns a string that represent this Rectangle object.
 						
 						
 					</div>
@@ -611,7 +682,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sat Mar 05 2011 22:12:03 GMT+0800 (CST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sat Mar 05 2011 22:12:04 GMT+0800 (CST)
 		</div>
 	</body>
 </html>

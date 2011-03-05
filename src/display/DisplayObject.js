@@ -77,7 +77,7 @@ casual.DisplayObject = DisplayObject;
 var canvas = document.createElement("canvas");
 canvas.width = canvas.height = 1;
 DisplayObject.__hitTestContext = canvas.getContext("2d");
-DisplayObject.__hitTestTolerance = 50;
+DisplayObject.__hitTestTolerance = 100;
 
 /**
  * Gets the scaled width of the display object currently, in pixels.
@@ -137,7 +137,7 @@ DisplayObject.prototype.globalToLocal = function(x, y)
  */
 DisplayObject.prototype.localToTarget = function(x, y, target) 
 {
-	var p = localToGlobal(x, y);
+	var p = this.localToGlobal(x, y);
 	return target.globalToLocal(p.x, p.y);
 }
 
@@ -213,7 +213,7 @@ DisplayObject.prototype.hitTestPoint = function(x, y, usePixelCollision, toleran
 	//render this displayobject to the hit testing context
 	this._render(context, false, true);
 
-	//default tolerance is 50
+	//default tolerance
 	tolerance = tolerance || DisplayObject.__hitTestTolerance;	
 	var result = false;
 	try
@@ -221,7 +221,7 @@ DisplayObject.prototype.hitTestPoint = function(x, y, usePixelCollision, toleran
 		//get image data (format:RGBA) by 1*1 rectangle, then check if it's transparent
 		var data = context.getImageData(0, 0, 1, 1).data;
 		//trace("hitTestPoint:", this, data[0], data[1], data[2], data[3], tolerance);
-		if(data[3] > tolerance) result = true;
+		if(data[3] >= tolerance) result = true;
 	}catch(e)
 	{
 		//do nothing, throw error?
@@ -234,6 +234,88 @@ DisplayObject.prototype.hitTestPoint = function(x, y, usePixelCollision, toleran
 	//context.setTransform(1, 0, 0, 1, 0, 0);
 	//context.clearRect(0, 0, 1, 1);
 	return result;
+}
+
+/**
+ * Evaluates the display object to see if it overlaps or intersects with the object parameter.
+ */
+DisplayObject.prototype.hitTestObject = function(object, usePixelCollision, tolerance)
+{
+	//note: to get right rectangle, pls make sure the objects' width/height are set.
+	var rect1 = this.getRect(this.getStage());
+	var rect2 = object.getRect(this.getStage());
+	
+	//default and fastest: compute intersection of two objects' rectangle
+	if(!usePixelCollision) return rect1.intersects(rect2);
+
+	var rect3 = rect1.intersection(rect2);
+	tolerance = tolerance || DisplayObject.__hitTestTolerance;
+	if(rect3)
+	{		
+		var result = false;
+		try
+		{			
+			//render the intersection of this object to the hit test context
+			var context = DisplayObject.__hitTestContext;
+			context.canvas.width = rect3.width;
+			context.canvas.height = rect3.height;
+			context.setTransform(1, 0, 0, 1, -rect3.x, -rect3.y);
+			this._render(context, false, true);
+			
+			//set all bitmap pixel data to same data
+			var imgData1 = context.getImageData(0, 0, rect3.width, rect3.height);
+			var pixelData1 = imgData1.data;
+			var i = 0;
+			while(i < pixelData1.length)
+			{
+				if(pixelData1[i] > 0 || pixelData1[i+1] > 0 || pixelData1[i+2] > 0 || pixelData1[i+3] >= tolerance)
+				{
+					pixelData1[i] = pixelData1[i+1] = pixelData1[i+2] = 100;					
+				}
+				i += 4;
+			}
+			
+			//clear canvas then render the comparer object onto it
+			context.canvas.width = 0;
+			context.canvas.width = rect3.width;
+			context.setTransform(1, 0, 0, 1, -rect3.x, -rect3.y);
+			object._render(context, false, true);
+			
+			//set all bitmap pixel data to another same data
+			var imgData2 = context.getImageData(0, 0, rect3.width, rect3.height);
+			var pixelData2 = imgData2.data;
+			i = 0;
+			while(i < pixelData2.length)
+			{
+				if(pixelData2[i] > 0 || pixelData2[i+1] > 0 || pixelData2[i+2] > 0 || pixelData2[i+3] >= tolerance)
+				{					
+					if(pixelData1[i] == 100 && pixelData1[i+1] == 100 && pixelData1[i+2] == 100)
+					{
+						result = true;
+						break;
+					}
+				}
+				i += 4;
+			}
+		}catch(e){};
+		
+		context.canvas.width = 0;
+		context.canvas.width = context.canvas.height = 1;
+		return result;
+	}
+	
+	return false;
+}
+
+/**
+ * Gets rectangle of this display object within specific target coordinate space.
+ * @function
+ * @param target
+ */
+DisplayObject.prototype.getRect = function(target)
+{
+	var p = this.localToTarget(0, 0, target);
+	return new Rectangle(p.x, p.y, this.getCurrentWidth(), this.getCurrentHeight());
 }
 
 /**

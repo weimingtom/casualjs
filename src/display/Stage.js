@@ -55,6 +55,9 @@ var Stage = function(context)
 	this.mouseTarget = null;
 	//refer to current dragging object
 	this.dragTarget = null;
+	//original mouse position for dragging object
+	this._dragMouseX = 0;
+	this._dragMouseY = 0;
 
 	//@protected
 	this._frameRate = 0;
@@ -195,9 +198,8 @@ Stage.prototype.render = function(context)
 	if(this.dragTarget)
 	{
 		//handle drag target
-		var p = this.dragTarget.globalToLocal(this.mouseX, this.mouseY);
-		this.dragTarget.x = p.x;
-		this.dragTarget.y = p.y;
+		this.dragTarget.x = this.mouseX - this._dragMouseX;
+		this.dragTarget.y = this.mouseY - this._dragMouseY;		
 	}
 	Stage.superClass.render.call(this, context);
 	
@@ -212,8 +214,11 @@ Stage.prototype.render = function(context)
  * Lets the user drag the specified display object.
  */
 Stage.prototype.startDrag = function(target, bounds)
-{
+{	
 	this.dragTarget = target;
+	var p = this.dragTarget.globalToLocal(this.mouseX, this.mouseY);	
+	this._dragMouseX = p.x;
+	this._dragMouseY = p.y;
 	//this.setCursor("pointer");
 	//this._bounds = bounds; //TODO: restrict dragging area
 }

@@ -40,6 +40,7 @@ window.EventDispatcher = casual.EventDispatcher;
 //geom
 window.Matrix = casual.Matrix;
 window.Point = casual.Point;
+window.Rectangle = casual.Rectangle;
 
 //utils
 window.Frame = casual.Frame;
