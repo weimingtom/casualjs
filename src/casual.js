@@ -58,3 +58,6 @@ window.MovieClip = casual.MovieClip;
 window.Stage = casual.Stage;
 window.Text = casual.Text;
 window.Button = casual.Button;
+
+//media
+window.Audio = casual.Audio;
