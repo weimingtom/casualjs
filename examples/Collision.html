@@ -102,9 +102,10 @@ function start()
 	pig = new Bitmap(img_pig);
 	pig.x = 300;
 	pig.y = 260;
-	stage.addChild(pig);
+	stage.addChild(pig);	
+	
+	//handle mouse events for the pig
 	pig.mouseEnabled = true;
-
 	pig.onMouseEvent = function(e)
 	{
 		if(e.type == "mousedown")
