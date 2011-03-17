@@ -43,11 +43,11 @@ Astar.findPath = function(map, start, end, f)
         f2 = Math.max,
         list = {},
         result = [],
-        open = [{x:start[0], y:start[1], f:0, g:0, v:start[0]+start[1]*cols}],
+        open = [{x:start[0], y:start[1], f:0, g:0, v:start[0]+"_"+start[1]}],
         length = 1,
         adj, distance, find, i, j, max, min, current, next
     ;
-    end = {x:end[0], y:end[1], v:end[0]+end[1]*cols};
+    end = {x:end[0], y:end[1], v:end[0]+"_"+end[1]};
     switch (f) {
         case "Diagonal":
             find = Astar.diagonalSuccessors;
@@ -82,7 +82,7 @@ Astar.findPath = function(map, start, end, f)
             for(i = 0, j = next.length; i < j; ++i){
                 (adj = next[i]).p = current;
                 adj.f = adj.g = 0;
-                adj.v = adj.x + adj.y * cols;
+                adj.v = adj.x+"_"+adj.y;
                 if(!(adj.v in list)){
                     adj.f = (adj.g = current.g + distance(adj, current, f1, f2)) + distance(adj, end, f1, f2);
                     open[length++] = adj;
