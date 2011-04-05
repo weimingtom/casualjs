@@ -76,9 +76,9 @@ casual.delegate = function(func, self, args)
 };
 
 /**
- * Make a copy of the parameter obj, you also can specify the target class.
+ * Make a copy of the parameter obj, you also can specify the target class and set new properties.
  */
-casual.copy = function(obj, targetClass)
+casual.copy = function(obj, targetClass, newProperties)
 {
 	//base type
 	if (typeof obj !== 'object') return obj;
@@ -100,7 +100,8 @@ casual.copy = function(obj, targetClass)
 	{
 		o = {};
 		for(var key in obj) o[key] = obj[key];
-	}	
+	}
+	if(newProperties) for(var key in newProperties) o[key] = newProperties[key];
 	return o;
 };
 

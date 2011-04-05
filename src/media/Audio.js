@@ -38,14 +38,20 @@ var Audio = function(filePath, autoPlay, loop)
 	this._loaded = false;
     this._playing = false;
 	this._autoPlay = autoPlay;
-
-    this._element = document.createElement('audio');
-    this._element.preload = true;
-    this._element.loop = loop || false;
-    this._element.src = filePath;
-    this._element.load();
-
-    this._loadInterval = setInterval(casual.delegate(this._loadHandler, this), 10);
+	this._loop = loop || false;
+	
+	try
+	{
+		this._element = document.createElement('audio');
+		this._element.preload = true;
+		//this._element.loop = loop || false;
+		this._element.src = filePath;
+		this._element.load();
+		//fix known issue: some browsers(like GECKO) don't support Audio.loop property.
+		//so add an 'ended' event listener to handle looping.
+		this._element.addEventListener("ended", casual.delegate(this._endHandler, this), false);
+		this._loadInterval = setInterval(casual.delegate(this._loadHandler, this), 10);
+	}catch(e){};
 }
 casual.Audio = Audio;
 
@@ -69,11 +75,20 @@ Audio.prototype._loadHandler = function()
 }
 
 /**
+ * @private
+ */
+Audio.prototype._endHandler = function()
+{
+	if(this._loop) this.play();
+	else this._playing = false;
+}
+
+/**
  * Starts playing the audio.
  */
 Audio.prototype.play = function()
 {
-	if (this.isLoaded() && !this.isPlaying())
+	if (this.isLoaded())
 	{
         this._element.play();
         this._playing = true;
