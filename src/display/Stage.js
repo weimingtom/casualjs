@@ -55,6 +55,8 @@ var Stage = function(context)
 	this.mouseTarget = null;
 	//refer to current dragging object
 	this.dragTarget = null;
+	//restrict dragging area
+	//this.dragBounds = null;
 	//original mouse position for dragging object
 	this._dragMouseX = 0;
 	this._dragMouseY = 0;
@@ -70,10 +72,19 @@ var Stage = function(context)
 	//default frameRate is 20
 	this.setFrameRate(20);
 	
-	//delegate mouse events on the canvas
-	this.canvas.onmousedown = casual.delegate(this.__mouseHandler, this);
-	this.canvas.onmouseup = casual.delegate(this.__mouseHandler, this);
-	this.canvas.onmousemove = casual.delegate(this.__mouseHandler, this);
+	//delegate mouse events on the canvas	
+	if(casual.StageEvent.supportTouch())
+	{
+		this.canvas.addEventListener("touchstart", casual.delegate(this.__touchHandler, this), false);
+		this.canvas.addEventListener("touchmove", casual.delegate(this.__touchHandler, this), false);
+		this.canvas.addEventListener("touchend", casual.delegate(this.__touchHandler, this), false);
+		this.canvas.addEventListener("touchcancel", casual.delegate(this.__touchHandler, this), false);
+	}else
+	{
+		this.canvas.addEventListener("mousedown", casual.delegate(this.__mouseHandler, this), false);
+		this.canvas.addEventListener("mouseup", casual.delegate(this.__mouseHandler, this), false);
+		this.canvas.addEventListener("mousemove", casual.delegate(this.__mouseHandler, this), false);
+	}
 }
 casual.inherit(Stage, casual.DisplayObjectContainer);
 casual.Stage = Stage;
@@ -114,6 +125,58 @@ Stage.prototype.setFrameRate = function(frameRate)
 	this._frameRate = frameRate;
 	if(this.__intervalID != null) clearInterval(this.__intervalID);
 	this.__intervalID = setInterval(casual.delegate(this.__enterFrame, this), 1000/this._frameRate);
+}
+
+/**
+ * @private
+ */
+Stage.prototype.__touchHandler = function(event)
+{
+	this.mouseX = event.changedTouches[0].pageX - this.canvas.offsetLeft;
+	this.mouseY = event.changedTouches[0].pageY - this.canvas.offsetTop;
+
+	if(this.traceMouseTarget)
+	{
+		this.__getMouseTarget(event);
+	}
+	
+	switch(event.type)
+	{
+		case "touchstart":
+			var e = casual.copy(event, casual.StageEvent, {type: "mouseover", button: 0});
+			e.target = e.currentTarget = this.mouseTarget || this;
+			e.mouseX = this.mouseX;
+			e.mouseY = this.mouseY;
+			if(this.mouseTarget && this.mouseTarget.onMouseEvent) this.mouseTarget.onMouseEvent(e);
+			this.dispatchEvent(e);
+			e = casual.copy(e, casual.StageEvent, {type: "mousedown"});
+			if(this.mouseTarget && this.mouseTarget.onMouseEvent) this.mouseTarget.onMouseEvent(e);
+			this.dispatchEvent(e);
+			event.preventDefault();
+			break;
+		case "touchmove":
+			var e = casual.copy(event, casual.StageEvent, {type: "mousemove", button: 0});
+			e.target = e.currentTarget = this.mouseTarget || this;
+			e.mouseX = this.mouseX;
+			e.mouseY = this.mouseY;
+			if(this.mouseTarget && this.mouseTarget.onMouseEvent) this.mouseTarget.onMouseEvent(e);
+			this.dispatchEvent(e);
+			event.preventDefault();
+			break;
+		case "touchend":
+			var e = casual.copy(event, casual.StageEvent, {type: "mouseup", button: 0});
+			e.target = e.currentTarget = this.mouseTarget || this;
+			e.mouseX = this.mouseX;
+			e.mouseY = this.mouseY;
+			if(this.mouseTarget && this.mouseTarget.onMouseEvent) 
+			{
+				this.mouseTarget.onMouseEvent(e);
+				this.mouseTarget.onMouseEvent(casual.copy(event, casual.StageEvent, {type: "mouseout"}));
+			}
+			this.dispatchEvent(e);
+			event.preventDefault();
+			break;
+	}
 }
 
 /**
@@ -197,9 +260,9 @@ Stage.prototype.render = function(context)
 	this.clear();
 	if(this.dragTarget)
 	{
-		//handle drag target
+		//handle dragging target
 		this.dragTarget.x = this.mouseX - this._dragMouseX;
-		this.dragTarget.y = this.mouseY - this._dragMouseY;		
+		this.dragTarget.y = this.mouseY - this._dragMouseY;
 	}
 	Stage.superClass.render.call(this, context);
 	
@@ -220,7 +283,7 @@ Stage.prototype.startDrag = function(target, bounds)
 	this._dragMouseX = p.x;
 	this._dragMouseY = p.y;
 	//this.setCursor("pointer");
-	//this._bounds = bounds; //TODO: restrict dragging area
+	//this.dragBounds = bounds; 
 }
 
 /**
@@ -229,6 +292,7 @@ Stage.prototype.startDrag = function(target, bounds)
 Stage.prototype.stopDrag = function()
 {
 	this.dragTarget = null;
+	//this.dragBounds = null;
 	//this.setCursor("");
 }
 

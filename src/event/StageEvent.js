@@ -57,6 +57,15 @@ StageEvent.MOUSE_OVER = "mouseover";
 /** Defines the value of the type property of a mouseout event object. */
 StageEvent.MOUSE_OUT = "mouseout";
 
+
+/**
+ * Returns whether the browser support touch.
+ */
+StageEvent.supportTouch = function()
+{
+	return typeof Touch == "object";
+}
+
 /**
  * Returns a string of the StageEvent object.
  */

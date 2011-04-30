@@ -76,6 +76,12 @@ MovieClip.prototype.setFrame = function(frameNumber, data)
 	else frame = new casual.Frame(data);
 	this._frames[frameNumber - 1] = frame;
 	if(frame.label) this._frameLables[frame.label] = frame;
+	if(frameNumber == 1)
+	{
+		this._frameDisObj = frame.disObj;
+		this.width = Math.max(this.width, this._frameDisObj.width);
+		this.height = Math.max(this.height, this._frameDisObj.height);
+	}
 }
 
 /**
@@ -198,6 +204,8 @@ MovieClip.prototype.render = function(context)
 	//add display object of current frame	
 	this.addChildAt(frame.disObj, 0);
 	this._frameDisObj = frame.disObj;	
+	this.width = Math.max(this.width, this._frameDisObj.width);
+	this.height = Math.max(this.height, this._frameDisObj.height);
 	if(frame.stop) this.stop();
 
 	//render children

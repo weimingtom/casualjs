@@ -37,6 +37,7 @@ var Shape = function(graphics)
 	casual.DisplayObject.call(this);
 	this.name = NameUtil.createUniqueName("Shape");
 	
+	this.mouseEnabled = false;
 	this.graphics = graphics || new casual.Graphics();
 }
 casual.inherit(Shape, casual.DisplayObject);

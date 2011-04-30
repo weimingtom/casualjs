@@ -78,6 +78,14 @@ Rectangle.prototype.intersection = function(rect)
 };
 
 /**
+ * Checks this rectangle whether contains the point parameter.
+ */
+Rectangle.prototype.containsPoint = function(x, y)
+{
+	return (this.x <= x && x <= this.x + this.width && this.y <= y && y <= this.y + this.height);
+}
+
+/**
  * Creates a copy of this Rectangle object.
  */
 Rectangle.prototype.clone = function()

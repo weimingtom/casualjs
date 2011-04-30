@@ -125,7 +125,8 @@ Graphics.prototype.beginRadialGradientFill = function(x0, y0, r0, x1, y1, r1, co
 }
 
 /**
- * Fills a drawing area with a bitmap image.
+ * Fills a drawing area with a bitmap image. 
+ * The repetition parameter must be one of the following values: repeat, repeat-x, repeat-y, no-repeat.
  */
 Graphics.prototype.beginBitmapFill = function(image, repetition)
 {
