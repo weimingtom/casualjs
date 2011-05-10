@@ -51,6 +51,8 @@ var Stage = function(context)
 
 	//determine whether trace mouse target
 	this.traceMouseTarget = true;
+	//determine whether use pixel collision while tracing mouse target
+	this.usePixelTrace = true;
 	//refer to current mouse target if set traceMouseTarget to true
 	this.mouseTarget = null;
 	//refer to current dragging object
@@ -132,13 +134,13 @@ Stage.prototype.setFrameRate = function(frameRate)
  */
 Stage.prototype.__touchHandler = function(event)
 {
-	this.mouseX = event.changedTouches[0].pageX - this.canvas.offsetLeft;
-	this.mouseY = event.changedTouches[0].pageY - this.canvas.offsetTop;
-
-	if(this.traceMouseTarget)
+	if(event.touches && event.touches[0])
 	{
-		this.__getMouseTarget(event);
+		this.mouseX = event.touches[0].screenX - this.canvas.offsetLeft;
+		this.mouseY = event.touches[0].screenY - this.canvas.offsetTop;
 	}
+
+	if(this.traceMouseTarget) this.__getMouseTarget(event);
 	
 	switch(event.type)
 	{
@@ -219,7 +221,7 @@ Stage.prototype.__mouseHandler = function(event)
  */
 Stage.prototype.__getMouseTarget = function(event)
 {
-	var obj = this.getObjectUnderPoint(this.mouseX, this.mouseY, true);
+	var obj = this.getObjectUnderPoint(this.mouseX, this.mouseY, this.usePixelTrace);
 	var oldObj = this.mouseTarget;
 	this.mouseTarget = obj;
 	if(oldObj && oldObj.onMouseEvent && oldObj != obj)
@@ -254,10 +256,11 @@ Stage.prototype.__enterFrame = function()
  * Each rendering is called, the stage will refresh the entire display list to canvas.
  * @private
  */
-Stage.prototype.render = function(context)
+Stage.prototype.render = function(context, rect)
 {	
 	if(!context) context = this.context;
-	this.clear();
+	if(rect) this.clear(rect.x, rect.y, rect.width, rect.height);
+	else this.clear();
 	if(this.dragTarget)
 	{
 		//handle dragging target
