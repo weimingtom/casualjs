@@ -80,12 +80,11 @@ var Stage = function(context)
 		this.canvas.addEventListener("touchstart", casual.delegate(this.__touchHandler, this), false);
 		this.canvas.addEventListener("touchmove", casual.delegate(this.__touchHandler, this), false);
 		this.canvas.addEventListener("touchend", casual.delegate(this.__touchHandler, this), false);
-		this.canvas.addEventListener("touchcancel", casual.delegate(this.__touchHandler, this), false);
 	}else
 	{
 		this.canvas.addEventListener("mousedown", casual.delegate(this.__mouseHandler, this), false);
-		this.canvas.addEventListener("mouseup", casual.delegate(this.__mouseHandler, this), false);
 		this.canvas.addEventListener("mousemove", casual.delegate(this.__mouseHandler, this), false);
+		this.canvas.addEventListener("mouseup", casual.delegate(this.__mouseHandler, this), false);
 	}
 }
 casual.inherit(Stage, casual.DisplayObjectContainer);
@@ -134,51 +133,36 @@ Stage.prototype.setFrameRate = function(frameRate)
  */
 Stage.prototype.__touchHandler = function(event)
 {
-	if(event.touches && event.touches[0])
+	var touch = (event.touches && event.touches.length) ? event.touches[0] :
+				(event.changedTouches && event.changedTouches.length) ? event.changedTouches[0] : null;
+	if(touch)
 	{
-		this.mouseX = event.touches[0].screenX - this.canvas.offsetLeft;
-		this.mouseY = event.touches[0].screenY - this.canvas.offsetTop;
+		var tx = touch.pageX || touch.clientX || touch.screenX;
+		var ty = touch.pageY || touch.clientY || touch.screenY;
+		this.mouseX = tx - this.canvas.offsetLeft;
+		this.mouseY = ty - this.canvas.offsetTop;
 	}
 
 	if(this.traceMouseTarget) this.__getMouseTarget(event);
 	
+	var props = {target:(this.mouseTarget || this), mouseX:this.mouseX, mouseY:this.mouseY, button:0};	
 	switch(event.type)
 	{
-		case "touchstart":
-			var e = casual.copy(event, casual.StageEvent, {type: "mouseover", button: 0});
-			e.target = e.currentTarget = this.mouseTarget || this;
-			e.mouseX = this.mouseX;
-			e.mouseY = this.mouseY;
-			if(this.mouseTarget && this.mouseTarget.onMouseEvent) this.mouseTarget.onMouseEvent(e);
-			this.dispatchEvent(e);
-			e = casual.copy(e, casual.StageEvent, {type: "mousedown"});
-			if(this.mouseTarget && this.mouseTarget.onMouseEvent) this.mouseTarget.onMouseEvent(e);
-			this.dispatchEvent(e);
-			event.preventDefault();
-			break;
-		case "touchmove":
-			var e = casual.copy(event, casual.StageEvent, {type: "mousemove", button: 0});
-			e.target = e.currentTarget = this.mouseTarget || this;
-			e.mouseX = this.mouseX;
-			e.mouseY = this.mouseY;
-			if(this.mouseTarget && this.mouseTarget.onMouseEvent) this.mouseTarget.onMouseEvent(e);
-			this.dispatchEvent(e);
-			event.preventDefault();
-			break;
-		case "touchend":
-			var e = casual.copy(event, casual.StageEvent, {type: "mouseup", button: 0});
-			e.target = e.currentTarget = this.mouseTarget || this;
-			e.mouseX = this.mouseX;
-			e.mouseY = this.mouseY;
-			if(this.mouseTarget && this.mouseTarget.onMouseEvent) 
-			{
-				this.mouseTarget.onMouseEvent(e);
-				this.mouseTarget.onMouseEvent(casual.copy(event, casual.StageEvent, {type: "mouseout"}));
-			}
-			this.dispatchEvent(e);
-			event.preventDefault();
-			break;
+		case "touchstart": props.type = "mousedown"; break;
+		case "touchmove": props.type = "mousemove"; break;
+		case "touchend": props.type = "mouseup"; break;
 	}
+
+	var e = casual.copy(event, casual.StageEvent, props);
+	if(this.mouseTarget && this.mouseTarget.onMouseEvent)
+	{
+		this.mouseTarget.onMouseEvent(e);
+		if(e.type == "mouseup") this.mouseTarget.onMouseEvent(casual.copy(event, casual.StageEvent, {type:"mouseout"}));
+	}
+	this.dispatchEvent(e);
+
+	event.preventDefault();
+	event.stopPropagation();
 }
 
 /**

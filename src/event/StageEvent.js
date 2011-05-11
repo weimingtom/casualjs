@@ -63,7 +63,7 @@ StageEvent.MOUSE_OUT = "mouseout";
  */
 StageEvent.supportTouch = function()
 {
-	return typeof Touch == "object";
+	return "ontouchstart" in document;
 }
 
 /**
