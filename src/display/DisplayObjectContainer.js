@@ -91,7 +91,11 @@ DisplayObjectContainer.prototype.removeChildAt = function(index)
 {
 	if (index < 0 || index > this.children.length - 1) return false;
 	var child = this.children[index];
-	if (child != null) child.parent = null;
+	if (child != null) 
+	{
+		child.parent = null;
+		child.stage = null;
+	}
 	this.children.splice(index, 1);
 	return true;
 }

@@ -39,7 +39,7 @@ casual.trace = function()
 	var logs = [];
 	for (var i = 0; i < arguments.length; i++) logs.push(arguments[i]);
 	//output to console.log by default
-	if(typeof(console) != "undefined" && typeof(console.log) == "function") console.log(logs.join(" "));
+	if(typeof(console) != "undefined" && typeof(console.log) != "undefined") console.log(logs.join(" "));
 };
 
 /**

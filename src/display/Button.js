@@ -204,6 +204,7 @@ Button.prototype.onMouseEvent = function(e)
 			break;
 		case "mouseup":
 			if(this.overState) this.setState(Button.state.OVER);
+			else this.setState(Button.state.UP);
 			if(this.onMouseUp) this.onMouseUp(e);
 			break;
 	}
