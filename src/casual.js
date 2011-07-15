@@ -60,4 +60,4 @@ window.Text = casual.Text;
 window.Button = casual.Button;
 
 //media
-//window.Audio = casual.Audio;
+//window.Audio = casual.Audio; //comment it, avoid conflicting with native Audio object
