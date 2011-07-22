@@ -28,7 +28,53 @@
 /**
  * Alias for CasualJS Framework
  */
- 
+
+(function()
+{	
+	var conflictMap = {}, cacheMap = {};	
+	function mapClass(className, host)
+	{
+		if(window[className] != undefined) conflictMap[className] = window[className];
+		cacheMap[className] = window[className] = (host || casual)[className];
+	}
+		
+	casual.noConflict = function()
+	{
+		for(var p in cacheMap) 
+		{
+			if(conflictMap[p] != undefined) window[p] = conflictMap[p];
+			else delete window[p];
+		}
+	}
+	
+	mapClass("trace");
+	
+	mapClass("EventBase");
+	mapClass("StageEvent");
+	mapClass("EventDispatcher");
+	
+	mapClass("Matrix");
+	mapClass("Point");
+	mapClass("Rectangle");
+	
+	mapClass("Astar");
+	mapClass("NameUtil");	
+	
+	mapClass("DisplayObject");
+	mapClass("DisplayObjectContainer");
+	mapClass("Graphics");
+	mapClass("Shape");
+	mapClass("Bitmap");
+	mapClass("Sprite");
+	mapClass("Frame");
+	mapClass("MovieClip");
+	mapClass("Stage");
+	mapClass("Text");
+	mapClass("Button");
+	
+})();
+
+/*/
 //core
 window.trace = casual.trace;
 
@@ -43,17 +89,17 @@ window.Point = casual.Point;
 window.Rectangle = casual.Rectangle;
 
 //utils
-window.Frame = casual.Frame;
 window.Astar = casual.Astar;
 window.NameUtil = casual.NameUtil;
 
 //display
 window.DisplayObject = casual.DisplayObject;
+window.DisplayObjectContainer = casual.DisplayObjectContainer;
 window.Graphics = casual.Graphics;
 window.Shape = casual.Shape;
 window.Bitmap = casual.Bitmap;
-window.DisplayObjectContainer = casual.DisplayObjectContainer;
 window.Sprite = casual.Sprite;
+window.Frame = casual.Frame;
 window.MovieClip = casual.MovieClip;
 window.Stage = casual.Stage;
 window.Text = casual.Text;
@@ -61,3 +107,4 @@ window.Button = casual.Button;
 
 //media
 //window.Audio = casual.Audio; //comment it, avoid conflicting with native Audio object
+//*/
