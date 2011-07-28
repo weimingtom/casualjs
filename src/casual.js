@@ -57,8 +57,8 @@
 	mapClass("Point");
 	mapClass("Rectangle");
 	
-	mapClass("Astar");
-	mapClass("NameUtil");	
+	//mapClass("Astar");
+	mapClass("NameUtil");
 	
 	mapClass("DisplayObject");
 	mapClass("DisplayObjectContainer");
@@ -73,38 +73,3 @@
 	mapClass("Button");
 	
 })();
-
-/*/
-//core
-window.trace = casual.trace;
-
-//event
-window.EventBase = casual.EventBase;
-window.StageEvent = casual.StageEvent;
-window.EventDispatcher = casual.EventDispatcher;
-
-//geom
-window.Matrix = casual.Matrix;
-window.Point = casual.Point;
-window.Rectangle = casual.Rectangle;
-
-//utils
-window.Astar = casual.Astar;
-window.NameUtil = casual.NameUtil;
-
-//display
-window.DisplayObject = casual.DisplayObject;
-window.DisplayObjectContainer = casual.DisplayObjectContainer;
-window.Graphics = casual.Graphics;
-window.Shape = casual.Shape;
-window.Bitmap = casual.Bitmap;
-window.Sprite = casual.Sprite;
-window.Frame = casual.Frame;
-window.MovieClip = casual.MovieClip;
-window.Stage = casual.Stage;
-window.Text = casual.Text;
-window.Button = casual.Button;
-
-//media
-//window.Audio = casual.Audio; //comment it, avoid conflicting with native Audio object
-//*/
